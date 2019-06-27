@@ -1,0 +1,319 @@
+package com.release.wanandroid
+
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.content.res.ColorStateList
+import android.os.Bundle
+import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.NavigationView
+import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
+import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.app.AppCompatDelegate
+import android.widget.TextView
+import com.release.wanandroid.base.BaseMvpActivity
+import com.release.wanandroid.constant.Constant
+import com.release.wanandroid.ext.showToast
+import com.release.wanandroid.mvp.contract.MainContract
+import com.release.wanandroid.mvp.presenter.MainPresenter
+import com.release.wanandroid.ui.adapter.ViewPagerAdapter
+import com.release.wanandroid.ui.fragment.*
+import com.release.wanandroid.ui.login.LoginActivity
+import com.release.wanandroid.utils.DialogUtil
+import com.release.wanandroid.utils.Preference
+import com.release.wanandroid.utils.SettingUtil
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.toolbar.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
+/**
+ * @author Mr.release
+ * @create 2019/6/24
+ * @Describe
+ */
+class MainActivity : BaseMvpActivity<MainContract.View,MainContract.Presenter>(),MainContract.View {
+
+    private val BOTTOM_INDEX: String = "bottom_index"
+
+    private val FRAGMENT_HOME = 0
+    private val FRAGMENT_KNOWLEDGE = 1
+    private val FRAGMENT_NAVIGATION = 2
+    private val FRAGMENT_PROJECT = 3
+    private val FRAGMENT_WECHAT = 4
+
+    private var mIndex = FRAGMENT_HOME
+
+    val fragments = ArrayList<Fragment>(5)
+
+    /**
+     * username TextView
+     */
+    private var nav_username: TextView? = null
+
+    /**
+     * local username
+     */
+    private val username: String by Preference(Constant.USERNAME_KEY, "")
+
+    private var mTitles: Array<String> =
+        arrayOf(
+            "首页",
+            "知识体系",
+            "导航",
+            "项目",
+            "公众号"
+        )
+
+
+    private val mAdapter: ViewPagerAdapter by lazy {
+        ViewPagerAdapter(fragments, supportFragmentManager)
+    }
+
+    override fun initLayoutID(): Int = R.layout.activity_main
+
+
+    companion object {
+        fun start(context: Context) {
+            Intent(context, MainActivity::class.java).run {
+                context.startActivity(this)
+            }
+        }
+    }
+
+    override fun createPresenter(): MainContract.Presenter = MainPresenter()
+
+    override fun showLogoutSuccess(success: Boolean) {
+        if(success){
+            doAsync {
+                Preference.clearPreference()
+                uiThread {
+                    mDialog.dismiss()
+                }
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        if (savedInstanceState!=null){
+            mIndex = savedInstanceState?.getInt(BOTTOM_INDEX)
+        }
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putInt(BOTTOM_INDEX,mIndex)
+    }
+
+    override fun initView() {
+
+        toolbar.run {
+            title = resources.getString(R.string.app_name)
+                setSupportActionBar(this)
+        }
+
+        bottom_navigation.run {
+
+            labelVisibilityMode = 1
+            setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        }
+
+        initDrawerLayout()
+        nav_view.run {
+            setNavigationItemSelectedListener(onDrawerNavigationItemSelectedListener)
+            nav_username = getHeaderView(0).findViewById(R.id.tv_username)
+            menu.findItem(R.id.nav_logout).isVisible = isLogin
+        }
+
+        nav_username?.run {
+            text = if(!isLogin){
+                getString(R.string.login)
+            }else{
+                username
+            }
+
+            setOnClickListener {
+                if(!isLogin){
+                    Intent(this@MainActivity,LoginActivity::class.java).run{
+                        startActivity(this)
+                    }
+                }
+            }
+        }
+
+
+        naviTag(mIndex)
+    }
+
+    override fun initColor() {
+        super.initColor()
+        nav_view.getHeaderView(0).setBackgroundColor(mThemeColor)
+    }
+
+    private fun initDrawerLayout() {
+        drawer_layout.run {
+            val toggle = ActionBarDrawerToggle(
+                this@MainActivity,
+                this, toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close
+            )
+            addDrawerListener(toggle)
+            toggle.syncState()
+        }
+    }
+
+    override fun initData() {
+        fragments.clear()
+        fragments.add(HomeFragment.getInstance())
+        fragments.add(KnowledgeTreeFragment.getInstance())
+        fragments.add(WeChatFragment.getInstance())
+        fragments.add(NavigationFragmentFragment.getInstance())
+        fragments.add(ProjectFragment.getInstance())
+
+
+
+        vp_main.run {
+            adapter = mAdapter
+            offscreenPageLimit = 5
+
+            addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrollStateChanged(state: Int) {
+
+                }
+
+                override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
+
+                }
+
+                override fun onPageSelected(p0: Int) {
+                    bottom_navigation.menu.getItem(p0).isChecked = true
+                    toolbar.title = mTitles[p0]
+                }
+            })
+        }
+    }
+
+    private val onNavigationItemSelectedListener =
+        BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            return@OnNavigationItemSelectedListener when (item.itemId) {
+                R.id.action_home -> {
+                    naviTag(FRAGMENT_HOME)
+                    true
+                }
+                R.id.action_knowledge_system -> {
+                    naviTag(FRAGMENT_KNOWLEDGE)
+                    true
+                }
+                R.id.action_navigation -> {
+                    naviTag(FRAGMENT_NAVIGATION)
+                    true
+                }
+                R.id.action_project -> {
+                    naviTag(FRAGMENT_PROJECT)
+                    true
+                }
+                R.id.action_wechat -> {
+                    naviTag(FRAGMENT_WECHAT)
+                    true
+                }
+                else -> {
+                    false
+                }
+
+            }
+        }
+
+    private fun naviTag(position: Int) {
+        mIndex = position
+        vp_main.currentItem = position
+        toolbar.title = mTitles[position]
+    }
+
+    /**
+     * NavigationView 监听
+     */
+    private val onDrawerNavigationItemSelectedListener =
+        NavigationView.OnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_collect -> {
+                    if (isLogin) {
+//                        Intent(this@MainActivity, CommonActivity::class.java).run {
+//                            putExtra(Constant.TYPE_KEY, Constant.Type.COLLECT_TYPE_KEY)
+//                            startActivity(this)
+//                        }
+                    } else {
+                        showToast(resources.getString(R.string.login_tint))
+                        Intent(this@MainActivity, LoginActivity::class.java).run {
+                            startActivity(this)
+                        }
+                    }
+                    // drawer_layout.closeDrawer(GravityCompat.START)
+                }
+                R.id.nav_setting -> {
+//                    Intent(this@MainActivity, SettingActivity::class.java).run {
+//                        // putExtra(Constant.TYPE_KEY, Constant.Type.SETTING_TYPE_KEY)
+//                        startActivity(this)
+//                    }
+                    // drawer_layout.closeDrawer(GravityCompat.START)
+                }
+                R.id.nav_about_us -> {
+//                    Intent(this@MainActivity, CommonActivity::class.java).run {
+//                        putExtra(Constant.TYPE_KEY, Constant.Type.ABOUT_US_TYPE_KEY)
+//                        startActivity(this)
+//                    }
+                    // drawer_layout.closeDrawer(GravityCompat.START)
+                }
+                R.id.nav_logout -> {
+                    logout()
+                    // drawer_layout.closeDrawer(GravityCompat.START)
+                }
+                R.id.nav_night_mode -> {
+                    if (SettingUtil.getIsNightMode()) {
+                        SettingUtil.setIsNightMode(false)
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    } else {
+                        SettingUtil.setIsNightMode(true)
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    }
+                    window.setWindowAnimations(R.style.WindowAnimationFadeInOut)
+                    recreate()
+                }
+                R.id.nav_todo -> {
+                    if (isLogin) {
+//                        Intent(this@MainActivity, TodoActivity::class.java).run {
+//                            startActivity(this)
+//                        }
+                    } else {
+                        showToast(resources.getString(R.string.login_tint))
+                        Intent(this@MainActivity, LoginActivity::class.java).run {
+                            startActivity(this)
+                        }
+                    }
+                    // drawer_layout.closeDrawer(GravityCompat.START)
+                }
+            }
+            true
+        }
+
+
+    /**
+     * 退出登录 Dialog
+     */
+    private val mDialog by lazy {
+        DialogUtil.getWaitDialog(this@MainActivity, resources.getString(R.string.logout_ing))
+    }
+    /**
+     * Logout
+     */
+    private fun logout() {
+        DialogUtil.getConfirmDialog(this, resources.getString(R.string.confirm_logout),
+            DialogInterface.OnClickListener { _, _ ->
+                mDialog.show()
+                mPresenter?.logout()
+            }).show()
+    }
+}
+
+

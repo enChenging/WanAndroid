@@ -1,0 +1,90 @@
+<resources>
+    <!--toolBar-->
+    <dimen name="tool_bar_test_view_size">18sp</dimen>
+    <dimen name="default_toolbar_height">43dp</dimen>
+    <dimen name="default_toolbar_selected_xtest_size">16sp</dimen>
+    <dimen name="default_toolbar_xtest_size">16sp</dimen>
+    <dimen name="default_toolbar_Indicator_height">3dp</dimen>
+    <dimen name="default_toolbar_margin_top">0dp</dimen>
+
+    <!--common text size-->
+    <dimen name="default_tiny_tiny_text_size">9sp</dimen>
+    <dimen name="default_tiny_small_text_size">10sp</dimen>
+    <dimen name="default_size_11">11sp</dimen>
+    <dimen name="default_tiny_text_size">12sp</dimen>
+    <dimen name="default_small_t_text_size">13sp</dimen>
+    <dimen name="default_small_text_size">14sp</dimen>
+    <dimen name="default_text_size">15sp</dimen>
+    <dimen name="default_medium_text_size">16sp</dimen>
+    <dimen name="default_big_text_size">18sp</dimen>
+    <dimen name="default_big_large_text_size">22sp</dimen>
+    <dimen name="default_general_margin">10dp</dimen>
+    <dimen name="pull_critical_distance">70dp</dimen>
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="avatar_width">80dp</dimen>
+    <dimen name="avatar_height">80dp</dimen>
+
+    <dimen name="appbar_layout_height">260dp</dimen>
+
+    <!-- item -->
+    <dimen name="item_tv_title">16sp</dimen>
+    <dimen name="item_tv_content">14sp</dimen>
+    <dimen name="item_tv_date">12sp</dimen>
+    <dimen name="item_tv_tag">12sp</dimen>
+    <dimen name="item_tv_author">12sp</dimen>
+    <dimen name="item_tv_via">12sp</dimen>
+    <dimen name="item_content_padding">10dp</dimen>
+    <dimen name="item_img_width">120dp</dimen>
+    <dimen name="item_img_height">90dp</dimen>
+
+    <dimen name="textSize_small_10">10sp</dimen>
+    <dimen name="textSize_small">12sp</dimen>
+    <dimen name="textSize_content">14sp</dimen>
+    <dimen name="textSize_titleSmall">16sp</dimen>
+    <dimen name="textSize_title">18sp</dimen>
+
+    <!-- dp -->
+    <dimen name="dp_05">0.5dp</dimen>
+    <dimen name="dp_1">1dp</dimen>
+    <dimen name="dp_2">2dp</dimen>
+    <dimen name="dp_3">3dp</dimen>
+    <dimen name="dp_4">4dp</dimen>
+    <dimen name="dp_5">5dp</dimen>
+    <dimen name="dp_6">6dp</dimen>
+    <dimen name="dp_8">8dp</dimen>
+    <dimen name="dp_10">10dp</dimen>
+    <dimen name="dp_12">12dp</dimen>
+    <dimen name="dp_16">16dp</dimen>
+    <dimen name="dp_18">18dp</dimen>
+    <dimen name="dp_20">20dp</dimen>
+    <dimen name="dp_24">24dp</dimen>
+    <dimen name="dp_26">26dp</dimen>
+    <dimen name="dp_28">28dp</dimen>
+    <dimen name="dp_30">30dp</dimen>
+    <dimen name="dp_36">36dp</dimen>
+    <dimen name="dp_50">50dp</dimen>
+    <dimen name="dp_54">54dp</dimen>
+    <dimen name="dp_60">60dp</dimen>
+    <dimen name="dp_80">80dp</dimen>
+    <dimen name="dp_90">90dp</dimen>
+    <dimen name="dp_100">100dp</dimen>
+    <dimen name="dp_110">110dp</dimen>
+    <dimen name="dp_168">168dp</dimen>
+    <dimen name="dp_180">180dp</dimen>
+    <dimen name="dp_230">230dp</dimen>
+
+    <!-- sp -->
+    <dimen name="sp_8">8sp</dimen>
+    <dimen name="sp_9">9sp</dimen>
+    <dimen name="sp_10">10sp</dimen>
+    <dimen name="sp_12">12sp</dimen>
+    <dimen name="sp_14">14sp</dimen>
+    <dimen name="sp_16">16sp</dimen>
+    <dimen name="sp_18">18sp</dimen>
+    <dimen name="sp_20">20sp</dimen>
+    <dimen name="sp_22">22sp</dimen>
+    <dimen name="sp_24">24sp</dimen>
+</resources>
