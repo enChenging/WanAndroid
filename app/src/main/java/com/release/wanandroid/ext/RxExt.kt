@@ -44,7 +44,6 @@ fun <T : BaseBean> Observable<T>.ss(
             }
 
             override fun onNext(t: T) {
-                Logger.i("onNext: ${t.errorCode}")
                 when {
                     t.errorCode == ErrorStatus.SUCCESS -> onSuccess.invoke(t)
                     t.errorCode == ErrorStatus.TOKEN_INVALID -> {
@@ -61,7 +60,6 @@ fun <T : BaseBean> Observable<T>.ss(
             }
 
             override fun onComplete() {
-                Logger.i("onComplete:")
                 view?.hideLoading()
             }
 

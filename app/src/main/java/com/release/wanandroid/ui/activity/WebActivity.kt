@@ -34,7 +34,6 @@ import org.greenrobot.eventbus.EventBus
  */
 class WebActivity : BaseMvpSwipeBackActivity<WebContracnt.View, WebContracnt.Presenter>(), WebContracnt.View {
 
-
     private var agentWeb: AgentWeb? = null
     private lateinit var shareTitle: String
     private lateinit var shareUrl: String
@@ -96,8 +95,7 @@ class WebActivity : BaseMvpSwipeBackActivity<WebContracnt.View, WebContracnt.Pre
             layoutParams,
             mWebView,
             webChromeClient,
-            webViewClient
-        )
+            webViewClient)
 
         agentWeb?.webCreator?.webView?.let {
             it.settings.domStorageEnabled = true
@@ -169,7 +167,6 @@ class WebActivity : BaseMvpSwipeBackActivity<WebContracnt.View, WebContracnt.Pre
         }
 
         override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
-            // super.onReceivedSslError(view, handler, error)
             handler?.proceed()
         }
     }

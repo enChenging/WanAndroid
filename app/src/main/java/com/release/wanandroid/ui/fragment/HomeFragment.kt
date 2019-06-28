@@ -206,6 +206,7 @@ class HomeFragment : BaseMvpFragment<HomeContract.View, HomeContract.Presenter>(
         if (bannerDatas.size > 0) {
             val data = bannerDatas[position]
             Intent(activity, WebActivity::class.java).run {
+                Logger.i("WebActivity---url: ${data.url}")
                 putExtra(Constant.CONTENT_URL_KEY, data.url)
                 putExtra(Constant.CONTENT_TITLE_KEY, data.title)
                 putExtra(Constant.CONTENT_ID_KEY, data.id)
