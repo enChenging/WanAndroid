@@ -17,6 +17,7 @@ import com.orhanobut.logger.Logger
 import com.release.wanandroid.R
 import com.release.wanandroid.base.BaseMvpSwipeBackActivity
 import com.release.wanandroid.constant.Constant
+import com.release.wanandroid.event.RefreshHomeEvent
 import com.release.wanandroid.ext.getAgentWeb
 import com.release.wanandroid.ext.showToast
 import com.release.wanandroid.mvp.contract.WebContracnt
@@ -24,6 +25,7 @@ import com.release.wanandroid.mvp.presenter.WebPresenter
 import com.release.wanandroid.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_web.*
 import kotlinx.android.synthetic.main.toolbar.*
+import org.greenrobot.eventbus.EventBus
 
 /**
  * @author Mr.release
@@ -48,12 +50,14 @@ class WebActivity : BaseMvpSwipeBackActivity<WebContracnt.View, WebContracnt.Pre
     override fun showCollectSuccess(success: Boolean) {
         if (success) {
             showToast(getString(R.string.collect_success))
+            EventBus.getDefault().post(RefreshHomeEvent(true))
         }
     }
 
     override fun showCancelCollectSuccess(success: Boolean) {
         if (success) {
             showToast(getString(R.string.cancel_collect_success))
+            EventBus.getDefault().post(RefreshHomeEvent(false))
         }
     }
 

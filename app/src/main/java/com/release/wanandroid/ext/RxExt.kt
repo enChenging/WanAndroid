@@ -1,6 +1,8 @@
 package com.release.wanandroid.ext
 
+import com.orhanobut.logger.Logger
 import com.release.wanandroid.App
+import com.release.wanandroid.MainActivity
 import com.release.wanandroid.R
 import com.release.wanandroid.base.IModel
 import com.release.wanandroid.base.IView
@@ -28,13 +30,13 @@ fun <T : BaseBean> Observable<T>.ss(
     this.compose(SchedulerUtils.ioToMain())
         .retryWhen(RetryWithDelay())
         .subscribe(object : Observer<T> {
-            override fun onComplete() {
-                view?.hideLoading()
-            }
 
             override fun onSubscribe(d: Disposable) {
+
                 if (isShowLoading) view?.showLoading()
+
                 model?.addDisposable(d)
+
                 if (!NetWorkUtil.isNetworkConnected(App.instance)) {
                     view?.showDefaultMsg(App.instance.resources.getString(R.string.network_unavailable_tip))
                     onComplete()
@@ -42,18 +44,25 @@ fun <T : BaseBean> Observable<T>.ss(
             }
 
             override fun onNext(t: T) {
+                Logger.i("onNext: ${t.errorCode}")
                 when {
                     t.errorCode == ErrorStatus.SUCCESS -> onSuccess.invoke(t)
                     t.errorCode == ErrorStatus.TOKEN_INVALID -> {
-                        // Token 过期，重新登录
+                        view?.showDefaultMsg("Token 过期，重新登录")
                     }
                     else -> view?.showDefaultMsg(t.errorMsg)
                 }
             }
 
             override fun onError(e: Throwable) {
+                Logger.i("onError: ${e.message}")
                 view?.hideLoading()
                 view?.showError(ExceptionHandle.handleException(e))
+            }
+
+            override fun onComplete() {
+                Logger.i("onComplete:")
+                view?.hideLoading()
             }
 
         })

@@ -3,7 +3,6 @@ package com.release.wanandroid
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.NavigationView
@@ -11,9 +10,12 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatDelegate
+import android.view.MenuItem
 import android.widget.TextView
+import com.orhanobut.logger.Logger
 import com.release.wanandroid.base.BaseMvpActivity
 import com.release.wanandroid.constant.Constant
+import com.release.wanandroid.event.LoginEvent
 import com.release.wanandroid.ext.showToast
 import com.release.wanandroid.mvp.contract.MainContract
 import com.release.wanandroid.mvp.presenter.MainPresenter
@@ -25,14 +27,28 @@ import com.release.wanandroid.utils.Preference
 import com.release.wanandroid.utils.SettingUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+
 /**
  * @author Mr.release
  * @create 2019/6/24
  * @Describe
  */
-class MainActivity : BaseMvpActivity<MainContract.View,MainContract.Presenter>(),MainContract.View {
+class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(), MainContract.View {
+
+    companion object {
+        fun start(context: Context) {
+            Intent(context, MainActivity::class.java).run {
+                context.startActivity(this)
+            }
+        }
+    }
+
+    override fun createPresenter(): MainContract.Presenter = MainPresenter()
 
     private val BOTTOM_INDEX: String = "bottom_index"
 
@@ -45,6 +61,8 @@ class MainActivity : BaseMvpActivity<MainContract.View,MainContract.Presenter>()
     private var mIndex = FRAGMENT_HOME
 
     val fragments = ArrayList<Fragment>(5)
+
+    override fun useEventBus(): Boolean = true
 
     /**
      * username TextView
@@ -73,29 +91,8 @@ class MainActivity : BaseMvpActivity<MainContract.View,MainContract.Presenter>()
     override fun initLayoutID(): Int = R.layout.activity_main
 
 
-    companion object {
-        fun start(context: Context) {
-            Intent(context, MainActivity::class.java).run {
-                context.startActivity(this)
-            }
-        }
-    }
-
-    override fun createPresenter(): MainContract.Presenter = MainPresenter()
-
-    override fun showLogoutSuccess(success: Boolean) {
-        if(success){
-            doAsync {
-                Preference.clearPreference()
-                uiThread {
-                    mDialog.dismiss()
-                }
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (savedInstanceState!=null){
+        if (savedInstanceState != null) {
             mIndex = savedInstanceState?.getInt(BOTTOM_INDEX)
         }
         super.onCreate(savedInstanceState)
@@ -103,14 +100,15 @@ class MainActivity : BaseMvpActivity<MainContract.View,MainContract.Presenter>()
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putInt(BOTTOM_INDEX,mIndex)
+        outState?.putInt(BOTTOM_INDEX, mIndex)
     }
 
+    var nav_mode: MenuItem? = null
     override fun initView() {
-
+        super.initView()
         toolbar.run {
             title = resources.getString(R.string.app_name)
-                setSupportActionBar(this)
+            setSupportActionBar(this)
         }
 
         bottom_navigation.run {
@@ -120,28 +118,33 @@ class MainActivity : BaseMvpActivity<MainContract.View,MainContract.Presenter>()
         }
 
         initDrawerLayout()
+
         nav_view.run {
             setNavigationItemSelectedListener(onDrawerNavigationItemSelectedListener)
             nav_username = getHeaderView(0).findViewById(R.id.tv_username)
             menu.findItem(R.id.nav_logout).isVisible = isLogin
+            nav_mode = menu.findItem(R.id.nav_night_mode)
+            if (SettingUtil.getIsNightMode())
+                nav_mode?.title = "日间模式"
+            else
+                nav_mode?.title = "夜间模式"
         }
 
         nav_username?.run {
-            text = if(!isLogin){
+            text = if (!isLogin) {
                 getString(R.string.login)
-            }else{
+            } else {
                 username
             }
 
             setOnClickListener {
-                if(!isLogin){
-                    Intent(this@MainActivity,LoginActivity::class.java).run{
+                if (!isLogin) {
+                    Intent(this@MainActivity, LoginActivity::class.java).run {
                         startActivity(this)
                     }
                 }
             }
         }
-
 
         naviTag(mIndex)
     }
@@ -149,6 +152,19 @@ class MainActivity : BaseMvpActivity<MainContract.View,MainContract.Presenter>()
     override fun initColor() {
         super.initColor()
         nav_view.getHeaderView(0).setBackgroundColor(mThemeColor)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun loginEvent(event: LoginEvent) {
+        if (event.isLogin)
+            nav_username?.text = username
+        else
+            nav_username?.text = resources.getString(R.string.login)
+
+        nav_view.menu.findItem(R.id.nav_logout).isVisible = isLogin
+        val fragment = fragments[FRAGMENT_HOME]
+        if (fragment is HomeFragment)
+            fragment.lazyLoad()
     }
 
     private fun initDrawerLayout() {
@@ -267,15 +283,18 @@ class MainActivity : BaseMvpActivity<MainContract.View,MainContract.Presenter>()
                 }
                 R.id.nav_logout -> {
                     logout()
-                    // drawer_layout.closeDrawer(GravityCompat.START)
+//                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_night_mode -> {
                     if (SettingUtil.getIsNightMode()) {
                         SettingUtil.setIsNightMode(false)
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)//日间模式
+                        nav_mode?.title = "夜间模式"
+
                     } else {
                         SettingUtil.setIsNightMode(true)
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)//夜间模式
+                        nav_mode?.title = "日间模式"
                     }
                     window.setWindowAnimations(R.style.WindowAnimationFadeInOut)
                     recreate()
@@ -304,6 +323,7 @@ class MainActivity : BaseMvpActivity<MainContract.View,MainContract.Presenter>()
     private val mDialog by lazy {
         DialogUtil.getWaitDialog(this@MainActivity, resources.getString(R.string.logout_ing))
     }
+
     /**
      * Logout
      */
@@ -313,6 +333,24 @@ class MainActivity : BaseMvpActivity<MainContract.View,MainContract.Presenter>()
                 mDialog.show()
                 mPresenter?.logout()
             }).show()
+    }
+
+    override fun showLogoutSuccess(success: Boolean) {
+        if (success) {
+            doAsync {
+                Preference.clearPreference()
+                uiThread {
+                    mDialog.dismiss()
+                    showToast(resources.getString(R.string.logout_success))
+                    isLogin = false
+                    EventBus.getDefault().post(LoginEvent(false))
+                    Intent(this@MainActivity, LoginActivity::class.java).run {
+                        startActivity(this)
+                    }
+
+                }
+            }
+        }
     }
 }
 

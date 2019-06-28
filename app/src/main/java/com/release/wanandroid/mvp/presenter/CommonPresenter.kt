@@ -8,8 +8,7 @@ import com.release.wanandroid.mvp.contract.CommonContract
  * @create 2019/6/25
  * @Describe
  */
-open class CommonPresenter<M : CommonContract.Model, V : CommonContract.View>
-    : BasePresenter<M, V>(), CommonContract.Presenter<V> {
+open class CommonPresenter<M : CommonContract.Model, V : CommonContract.View> : BasePresenter<M, V>(), CommonContract.Presenter<V> {
     override fun addCollectArticle(id: Int) {
         mModel?.addCollectArticle(id)
     }

@@ -5,12 +5,14 @@ import android.view.View
 import com.release.wanandroid.R
 import com.release.wanandroid.base.BaseMvpActivity
 import com.release.wanandroid.constant.Constant
+import com.release.wanandroid.event.LoginEvent
 import com.release.wanandroid.ext.showToast
 import com.release.wanandroid.mvp.contract.LoginContract
 import com.release.wanandroid.mvp.model.bean.LoginData
 import com.release.wanandroid.mvp.presenter.LoginPresenter
 import com.release.wanandroid.utils.Preference
 import kotlinx.android.synthetic.main.activity_login.*
+import org.greenrobot.eventbus.EventBus
 
 /**
  * @author Mr.release
@@ -51,6 +53,8 @@ class LoginActivity :BaseMvpActivity<LoginContract.View,LoginContract.Presenter>
         user = data.username
         pwd = data.password
         token = data.token
+
+        EventBus.getDefault().post(LoginEvent(true))
         finish()
     }
 

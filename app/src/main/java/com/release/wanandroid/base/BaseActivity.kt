@@ -16,6 +16,7 @@ import com.release.wanandroid.utils.CommonUtil
 import com.release.wanandroid.utils.Preference
 import com.release.wanandroid.utils.SettingUtil
 import com.release.wanandroid.utils.StatusBarUtil
+import org.greenrobot.eventbus.EventBus
 
 /**
  * @author Mr.release
@@ -32,6 +33,8 @@ abstract class BaseActivity : AppCompatActivity() {
     protected var mThemeColor: Int = SettingUtil.getColor()
 
     protected var mLayoutStatusView: MultipleStatusView? = null
+
+    open  fun useEventBus():Boolean = false
 
     open fun initView() {
 
@@ -53,6 +56,8 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(initLayoutID())
+        if (useEventBus())
+            EventBus.getDefault().register(this)
         initView()
         initData()
         startNet()
@@ -106,12 +111,13 @@ abstract class BaseActivity : AppCompatActivity() {
             super.onBackPressed()
         } else {
             supportFragmentManager.popBackStack()
-            Logger.i("onBackPressed----base-----2")
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        if(useEventBus())
+            EventBus.getDefault().unregister(this)
         CommonUtil.fixInputMethodManagerLeak(this)
     }
 
