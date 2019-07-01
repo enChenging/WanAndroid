@@ -7,7 +7,15 @@ import android.support.v7.app.AppCompatDelegate
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
+import com.release.wanandroid.constant.Constant
+import com.release.wanandroid.ext.showToast
+import com.release.wanandroid.utils.CommonUtil
+import com.release.wanandroid.utils.DisplayManager
 import com.release.wanandroid.utils.SettingUtil
+import com.tencent.bugly.Bugly
+import com.tencent.bugly.beta.Beta
+import com.tencent.bugly.beta.upgrade.UpgradeStateListener
+import com.tencent.bugly.crashreport.CrashReport
 import org.litepal.LitePal
 import java.util.*
 import kotlin.properties.Delegates
@@ -31,8 +39,53 @@ class App : MultiDexApplication(){
         instance = this
         context  = applicationContext
         initConfig()
-        initLitePal()
+        DisplayManager.init(this)
         initTheme()
+        initLitePal()
+        initBugly()
+    }
+
+    /**
+     * 初始化 Bugly
+     */
+    private fun initBugly() {
+        if (BuildConfig.DEBUG) {
+            return
+        }
+        // 获取当前包名
+        val packageName = applicationContext.packageName
+        // 获取当前进程名
+        val processName = CommonUtil.getProcessName(android.os.Process.myPid())
+        Beta.upgradeStateListener = object : UpgradeStateListener {
+            override fun onDownloadCompleted(isManual: Boolean) {
+            }
+
+            override fun onUpgradeSuccess(isManual: Boolean) {
+            }
+
+            override fun onUpgradeFailed(isManual: Boolean) {
+                if (isManual) {
+                    showToast(getString(R.string.check_version_fail))
+                }
+            }
+
+            override fun onUpgrading(isManual: Boolean) {
+                if (isManual) {
+                    showToast(getString(R.string.check_version_ing))
+                }
+            }
+
+            override fun onUpgradeNoVersion(isManual: Boolean) {
+                if (isManual) {
+                    showToast(getString(R.string.check_no_version))
+                }
+            }
+        }
+        // 设置是否为上报进程
+        val strategy = CrashReport.UserStrategy(applicationContext)
+        strategy.isUploadProcess = false || processName == packageName
+        // CrashReport.initCrashReport(applicationContext, Constant.BUGLY_ID, BuildConfig.DEBUG, strategy)
+        Bugly.init(applicationContext, Constant.BUGLY_ID, BuildConfig.DEBUG, strategy)
     }
 
     private fun initLitePal() {

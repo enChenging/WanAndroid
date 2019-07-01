@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.classic.common.MultipleStatusView
 import com.release.wanandroid.constant.Constant
 import com.release.wanandroid.utils.Preference
+import org.greenrobot.eventbus.EventBus
 
 /**
  * @author Mr.release
@@ -33,11 +34,16 @@ abstract class BaseFragment : Fragment() {
 
     abstract fun initLayoutID(): Int
 
-    open fun initView() {}
+    open fun initView(view: View) {}
 
     open fun initData() {}
 
     open fun lazyLoad() {}
+
+    /**
+     * 是否使用 EventBus
+     */
+    open fun useEventBus(): Boolean = false
 
     open fun doReConnected() {
         lazyLoad()
@@ -50,9 +56,12 @@ abstract class BaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (useEventBus()){
+            EventBus.getDefault().register(this)
+        }
         isViewPrepare = true
-        initView()
         initData()
+        initView(view)
         lazyLoadDataIfPrepared()
         //多种状态切换的view 重试点击事件
         mLayoutStatusView?.setOnClickListener(mRetryClickListener)
@@ -72,6 +81,13 @@ abstract class BaseFragment : Fragment() {
         if (userVisibleHint && isViewPrepare && !hasLoadData) {
             lazyLoad()
             hasLoadData = true
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (useEventBus()) {
+            EventBus.getDefault().unregister(this)
         }
     }
 }

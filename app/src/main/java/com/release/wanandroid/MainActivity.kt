@@ -3,22 +3,31 @@ package com.release.wanandroid
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
+import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatDelegate
+import android.view.KeyEvent
+import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
-import com.orhanobut.logger.Logger
 import com.release.wanandroid.base.BaseMvpActivity
 import com.release.wanandroid.constant.Constant
+import com.release.wanandroid.event.ColorEvent
 import com.release.wanandroid.event.LoginEvent
 import com.release.wanandroid.ext.showToast
 import com.release.wanandroid.mvp.contract.MainContract
 import com.release.wanandroid.mvp.presenter.MainPresenter
+import com.release.wanandroid.ui.activity.CommonActivity
+import com.release.wanandroid.ui.activity.SearchActivity
+import com.release.wanandroid.ui.activity.SettingActivity
+import com.release.wanandroid.ui.activity.TodoActivity
 import com.release.wanandroid.ui.adapter.ViewPagerAdapter
 import com.release.wanandroid.ui.fragment.*
 import com.release.wanandroid.ui.login.LoginActivity
@@ -54,9 +63,9 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
 
     private val FRAGMENT_HOME = 0
     private val FRAGMENT_KNOWLEDGE = 1
-    private val FRAGMENT_NAVIGATION = 2
-    private val FRAGMENT_PROJECT = 3
-    private val FRAGMENT_WECHAT = 4
+    private val FRAGMENT_WECHAT = 2
+    private val FRAGMENT_NAVIGATION = 3
+    private val FRAGMENT_PROJECT = 4
 
     private var mIndex = FRAGMENT_HOME
 
@@ -78,9 +87,9 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         arrayOf(
             "首页",
             "知识体系",
+            "公众号",
             "导航",
-            "项目",
-            "公众号"
+            "项目"
         )
 
 
@@ -147,11 +156,78 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         }
 
         naviTag(mIndex)
+
+        floating_action_btn.run {
+            setOnClickListener(onFABClickListener)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_activity_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_search -> {
+                Intent(this, SearchActivity::class.java).run {
+                    startActivity(this)
+                }
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private var mExitTime: Long = 0
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (System.currentTimeMillis().minus(mExitTime) <= 2000) {
+                finish()
+            } else {
+                mExitTime = System.currentTimeMillis()
+                showToast(getString(R.string.exit_tip))
+            }
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+    /**
+     * FAB 监听
+     */
+    private val onFABClickListener = View.OnClickListener {
+        when (mIndex) {
+            FRAGMENT_HOME -> {
+                (fragments[FRAGMENT_HOME] as HomeFragment).scrollToTop()
+            }
+            FRAGMENT_KNOWLEDGE -> {
+                (fragments[FRAGMENT_KNOWLEDGE] as KnowledgeFragment).scrollToTop()
+            }
+            FRAGMENT_NAVIGATION -> {
+                (fragments[FRAGMENT_NAVIGATION] as NavigationFragment).scrollToTop()
+            }
+            FRAGMENT_PROJECT -> {
+                (fragments[FRAGMENT_PROJECT] as ProjectFragment).scrollToTop()
+            }
+            FRAGMENT_WECHAT -> {
+                (fragments[FRAGMENT_WECHAT] as WeChatFragment).scrollToTop()
+            }
+        }
     }
 
     override fun initColor() {
         super.initColor()
-        nav_view.getHeaderView(0).setBackgroundColor(mThemeColor)
+        refreshColor(ColorEvent(true))
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun refreshColor(event: ColorEvent) {
+        if (event.isRefresh) {
+            nav_view.getHeaderView(0).setBackgroundColor(mThemeColor)
+            floating_action_btn.backgroundTintList = ColorStateList.valueOf(mThemeColor)
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -185,7 +261,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         fragments.add(HomeFragment.getInstance())
         fragments.add(KnowledgeTreeFragment.getInstance())
         fragments.add(WeChatFragment.getInstance())
-        fragments.add(NavigationFragmentFragment.getInstance())
+        fragments.add(NavigationFragment.getInstance())
         fragments.add(ProjectFragment.getInstance())
 
 
@@ -222,6 +298,10 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
                     naviTag(FRAGMENT_KNOWLEDGE)
                     true
                 }
+                R.id.action_wechat -> {
+                    naviTag(FRAGMENT_WECHAT)
+                    true
+                }
                 R.id.action_navigation -> {
                     naviTag(FRAGMENT_NAVIGATION)
                     true
@@ -230,10 +310,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
                     naviTag(FRAGMENT_PROJECT)
                     true
                 }
-                R.id.action_wechat -> {
-                    naviTag(FRAGMENT_WECHAT)
-                    true
-                }
+
                 else -> {
                     false
                 }
@@ -255,35 +332,34 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             when (item.itemId) {
                 R.id.nav_collect -> {
                     if (isLogin) {
-//                        Intent(this@MainActivity, CommonActivity::class.java).run {
-//                            putExtra(Constant.TYPE_KEY, Constant.Type.COLLECT_TYPE_KEY)
-//                            startActivity(this)
-//                        }
+                        Intent(this@MainActivity, CommonActivity::class.java).run {
+                            putExtra(Constant.TYPE_KEY, Constant.Type.COLLECT_TYPE_KEY)
+                            startActivity(this)
+                        }
                     } else {
                         showToast(resources.getString(R.string.login_tint))
                         Intent(this@MainActivity, LoginActivity::class.java).run {
                             startActivity(this)
                         }
                     }
-                    // drawer_layout.closeDrawer(GravityCompat.START)
+                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_setting -> {
-//                    Intent(this@MainActivity, SettingActivity::class.java).run {
-//                        // putExtra(Constant.TYPE_KEY, Constant.Type.SETTING_TYPE_KEY)
-//                        startActivity(this)
-//                    }
-                    // drawer_layout.closeDrawer(GravityCompat.START)
+                    Intent(this@MainActivity, SettingActivity::class.java).run {
+                        startActivity(this)
+                    }
+                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_about_us -> {
-//                    Intent(this@MainActivity, CommonActivity::class.java).run {
-//                        putExtra(Constant.TYPE_KEY, Constant.Type.ABOUT_US_TYPE_KEY)
-//                        startActivity(this)
-//                    }
-                    // drawer_layout.closeDrawer(GravityCompat.START)
+                    Intent(this@MainActivity, CommonActivity::class.java).run {
+                        putExtra(Constant.TYPE_KEY, Constant.Type.ABOUT_US_TYPE_KEY)
+                        startActivity(this)
+                    }
+                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_logout -> {
                     logout()
-//                     drawer_layout.closeDrawer(GravityCompat.START)
+                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_night_mode -> {
                     if (SettingUtil.getIsNightMode()) {
@@ -301,16 +377,16 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
                 }
                 R.id.nav_todo -> {
                     if (isLogin) {
-//                        Intent(this@MainActivity, TodoActivity::class.java).run {
-//                            startActivity(this)
-//                        }
+                        Intent(this@MainActivity, TodoActivity::class.java).run {
+                            startActivity(this)
+                        }
                     } else {
                         showToast(resources.getString(R.string.login_tint))
                         Intent(this@MainActivity, LoginActivity::class.java).run {
                             startActivity(this)
                         }
                     }
-                    // drawer_layout.closeDrawer(GravityCompat.START)
+                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
             }
             true

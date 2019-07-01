@@ -68,10 +68,10 @@ class LoginActivity :BaseMvpActivity<LoginContract.View,LoginContract.Presenter>
                 login()
             }
             R.id.tv_sign_up ->{
-//                val intent = Intent(this,RegisterActivity::class.java)
-//                startActivity(intent)
-//                finish()
-//                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                val intent = Intent(this,RegisterActivity::class.java)
+                startActivity(intent)
+                finish()
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }
         }
     }

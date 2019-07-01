@@ -93,8 +93,8 @@ class HomeFragment : BaseMvpFragment<HomeContract.View, HomeContract.Presenter>(
     override fun initLayoutID(): Int = R.layout.fragment_home
 
 
-    override fun initView() {
-        super.initView()
+    override fun initView(view:View) {
+        super.initView(view)
         mLayoutStatusView = multiple_status_view
 
         swipeRefreshLayout.run {
@@ -194,10 +194,6 @@ class HomeFragment : BaseMvpFragment<HomeContract.View, HomeContract.Presenter>(
             showToast(resources.getString(R.string.cancel_collect_success))
         }
     }
-
-
-
-
 
     /**
      * BannerClickListener

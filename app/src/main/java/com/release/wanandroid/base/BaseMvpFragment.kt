@@ -1,5 +1,6 @@
 package com.release.wanandroid.base
 
+import android.view.View
 import com.release.wanandroid.ext.showToast
 
 /**
@@ -17,8 +18,8 @@ abstract class BaseMvpFragment<in V : IView, P : IPresenter<V>> : BaseFragment()
 
     protected abstract fun createPresenter(): P
 
-    override fun initView() {
-        super.initView()
+    override fun initView(view: View) {
+        super.initView(view)
         mPresenter = createPresenter()
         mPresenter?.attachView(this as V)
     }

@@ -96,6 +96,9 @@ dependencies {
     implementation 'com.github.clans:fab:1.6.4'
     implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
     implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation 'q.rorbin:VerticalTabLayout:1.2.5'
+    implementation 'com.hyman:flowlayout-lib:1.1.2'
+    implementation 'com.tencent.bugly:crashreport_upgrade:1.4.1'
 
 
 

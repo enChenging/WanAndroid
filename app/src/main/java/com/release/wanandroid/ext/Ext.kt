@@ -15,6 +15,8 @@ import com.just.agentweb.AgentWeb
 import com.just.agentweb.DefaultWebClient
 import com.release.wanandroid.R
 import com.release.wanandroid.widget.CustomToast
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * @author Mr.release
@@ -37,6 +39,13 @@ fun Fragment.showSnackMsg(msg:String){
     snackbar.show()
 }
 
+fun Activity.showSnackMsg(msg: String) {
+    val snackbar = Snackbar.make(this.window.decorView, msg, Snackbar.LENGTH_SHORT)
+    val view = snackbar.view
+    view.findViewById<TextView>(R.id.snackbar_text).setTextColor(ContextCompat.getColor(this, R.color.white))
+    snackbar.show()
+}
+
 fun String.getAgentWeb(
     activity: Activity,
     webContent: ViewGroup,
@@ -55,3 +64,22 @@ fun String.getAgentWeb(
     .createAgentWeb()
     .ready()
     .go(this)
+
+/**
+ * 格式化当前日期
+ */
+fun formatCurrentDate(): String {
+    val sdf = SimpleDateFormat("yyyy-MM-dd")
+    return sdf.format(Date())
+}
+
+/**
+ * String 转 Calendar
+ */
+fun String.stringToCalendar(): Calendar {
+    val sdf = SimpleDateFormat("yyyy-MM-dd")
+    val date = sdf.parse(this)
+    val calendar = Calendar.getInstance()
+    calendar.time = date
+    return calendar
+}
