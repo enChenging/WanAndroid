@@ -84,7 +84,6 @@ class App : MultiDexApplication(){
         // 设置是否为上报进程
         val strategy = CrashReport.UserStrategy(applicationContext)
         strategy.isUploadProcess = false || processName == packageName
-        // CrashReport.initCrashReport(applicationContext, Constant.BUGLY_ID, BuildConfig.DEBUG, strategy)
         Bugly.init(applicationContext, Constant.BUGLY_ID, BuildConfig.DEBUG, strategy)
     }
 

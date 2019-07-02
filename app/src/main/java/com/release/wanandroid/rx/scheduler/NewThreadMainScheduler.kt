@@ -8,4 +8,4 @@ import io.reactivex.schedulers.Schedulers
  * @create 2019/6/24
  * @Describe
  */
-class NewThreadMainScheduler<T> private constructor() : BaseScheduler<T>(Schedulers.newThread(), AndroidSchedulers.mainThread())
+class NewThreadMainScheduler<T> : BaseScheduler<T>(Schedulers.newThread(), AndroidSchedulers.mainThread())

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="BaseAppTheme" parent="Theme.AppCompat.DayNight">
@@ -23,7 +23,7 @@
 
 
     <style name="SplashTheme" parent="BaseAppTheme.NoActionBar">
-        <item name="android:windowFullscreen">true</item>
+        <!--<item name="android:windowBackground">@mipmap/splasha</item>-->
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

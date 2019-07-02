@@ -1,8 +1,12 @@
 package com.release.wanandroid.ui.login
 
+import android.content.Intent
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import com.release.wanandroid.MainActivity
 import com.release.wanandroid.R
 import com.release.wanandroid.base.BaseActivity
+import com.release.wanandroid.utils.StatusBarUtil
 import kotlinx.android.synthetic.main.activity_splash.*
 
 /**
@@ -17,13 +21,36 @@ class SplashActivity : BaseActivity() {
     }
 
     override fun initView() {
-        tv_jump.run {
-            setOnClickListener {
-                MainActivity.start(this@SplashActivity)
-                finish()
-            }
+        val alphaAnimation = AlphaAnimation(0.3f, 1.0f)
+        alphaAnimation.run {
+            duration = 2000
+            setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+                    jumpToMain()
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+                }
+
+            })
         }
+        layout_splash.startAnimation(alphaAnimation)
+
     }
 
+    private fun jumpToMain() {
+        Intent(this, MainActivity::class.java).run {
+            startActivity(this)
+        }
+        finish()
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+    }
+
+    override fun initColor() {
+        StatusBarUtil.setTranslucent(this, 0)
+    }
 
 }

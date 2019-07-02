@@ -8,7 +8,7 @@ package com.release.wanandroid.constant
 
 object Constant {
 
-    const val BUGLY_ID = "76e2b2867d"
+    const val BUGLY_ID = "bd6527b403"
 
     const val BASE_URL = "https://www.wanandroid.com/"
 

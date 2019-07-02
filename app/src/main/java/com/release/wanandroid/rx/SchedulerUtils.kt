@@ -1,6 +1,6 @@
 package com.release.wanandroid.rx
 
-import com.cxz.wanandroid.rx.scheduler.IoMainScheduler
+import com.cxz.wanandroid.rx.scheduler.*
 
 /**
  * @author Mr.release
@@ -13,4 +13,19 @@ object SchedulerUtils {
         return IoMainScheduler()
     }
 
+    fun <T> computationToMain(): ComputationMainScheduler<T> {
+        return ComputationMainScheduler()
+    }
+
+    fun <T> newThreadToMain(): NewThreadMainScheduler<T> {
+        return NewThreadMainScheduler()
+    }
+
+    fun <T> singleToMain(): SingleMainScheduler<T> {
+        return SingleMainScheduler()
+    }
+
+    fun <T> trampolineToMain(): TrampolineMainScheduler<T> {
+        return TrampolineMainScheduler()
+    }
 }

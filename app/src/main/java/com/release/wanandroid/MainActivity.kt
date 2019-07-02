@@ -49,14 +49,6 @@ import org.jetbrains.anko.uiThread
  */
 class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(), MainContract.View {
 
-    companion object {
-        fun start(context: Context) {
-            Intent(context, MainActivity::class.java).run {
-                context.startActivity(this)
-            }
-        }
-    }
-
     override fun createPresenter(): MainContract.Presenter = MainPresenter()
 
     private val BOTTOM_INDEX: String = "bottom_index"
