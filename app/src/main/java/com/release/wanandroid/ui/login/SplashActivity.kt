@@ -21,7 +21,7 @@ class SplashActivity : BaseActivity() {
     }
 
     override fun initView() {
-        val alphaAnimation = AlphaAnimation(0.3f, 1.0f)
+        val alphaAnimation = AlphaAnimation(0.5f, 1.0f)
         alphaAnimation.run {
             duration = 2000
             setAnimationListener(object : Animation.AnimationListener {
