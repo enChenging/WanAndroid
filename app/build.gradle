@@ -105,11 +105,10 @@ dependencies {
 
 
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+//    implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
-    implementation 'com.squareup.retrofit2:converter-moshi:2.4.0'
-    implementation 'com.squareup.moshi:moshi-kotlin:1.7.0'
 
 
     implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
@@ -118,19 +117,19 @@ dependencies {
     implementation "org.jetbrains.anko:anko-commons:0.10.8"
 
 
-    implementation 'com.classic.common:multiple-status-view:1.6'
-    implementation 'com.github.ybq:Android-SpinKit:1.2.0'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46'
-    implementation 'org.litepal.android:core:2.0.0'
+    implementation 'org.litepal.android:kotlin:3.0.0'
+    implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'cn.bingoogolapple:bga-banner:2.2.4@aar'
+    implementation 'com.hyman:flowlayout-lib:1.1.2'
+    implementation 'com.github.ybq:Android-SpinKit:1.2.0'
     implementation 'com.just.agentweb:agentweb:4.0.2'
+    implementation 'com.classic.common:multiple-status-view:1.6'
+    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
     implementation 'com.cxz:swipeback:1.0.1'
     implementation 'com.orhanobut:logger:2.2.0'
     implementation 'com.github.clans:fab:1.6.4'
-    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
-    implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'q.rorbin:VerticalTabLayout:1.2.5'
-    implementation 'com.hyman:flowlayout-lib:1.1.2'
     implementation 'com.tencent.bugly:crashreport_upgrade:1.4.1'
     implementation 'com.tencent.bugly:nativecrashreport:3.7.1'
 

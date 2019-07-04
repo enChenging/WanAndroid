@@ -2,7 +2,6 @@ package com.release.wanandroid.ext
 
 import com.orhanobut.logger.Logger
 import com.release.wanandroid.App
-import com.release.wanandroid.MainActivity
 import com.release.wanandroid.R
 import com.release.wanandroid.base.IModel
 import com.release.wanandroid.base.IView
@@ -25,7 +24,7 @@ fun <T : BaseBean> Observable<T>.ss(
     model: IModel?,
     view: IView?,
     isShowLoading: Boolean = true,
-    onSuccess: (T) -> Unit
+    onSuccess: (T) -> Unit  //T.()->Unit里的this代表的是自身实例，而()->Unit里，this代表的是外部类的实例
 ) {
     this.compose(SchedulerUtils.ioToMain())
         .retryWhen(RetryWithDelay())

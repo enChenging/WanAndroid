@@ -148,6 +148,7 @@ class HomeFragment : BaseMvpFragment<HomeContract.View, HomeContract.Presenter>(
         bannerDatas = banners as ArrayList<Banner>
         val bannerFeedList = ArrayList<String>()
         val bannerTitleList = ArrayList<String>()
+
         Observable.fromIterable(banners)
             .subscribe { list ->
                 bannerFeedList.add(list.imagePath)
