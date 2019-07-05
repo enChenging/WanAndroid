@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -59,11 +59,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp_24"
                 android:layout_marginTop="@dimen/dp_24"
-                android:background="@drawable/btn_login_bg"
+                android:background="@drawable/btn_rectangle_blue_20"
                 android:gravity="center"
                 android:padding="@dimen/dp_12"
                 android:text="@string/login"
-                android:textColor="@color/viewBackground" />
+                android:textColor="@color/White" />
 
         <TextView
                 android:id="@+id/tv_sign_up"
@@ -75,4 +75,4 @@
                 android:textSize="@dimen/sp_16" />
 
     </LinearLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>

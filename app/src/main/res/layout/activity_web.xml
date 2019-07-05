@@ -7,6 +7,9 @@
         android:background="@color/viewBackground"
         android:orientation="vertical">
 
-    <include layout="@layout/toolbar"/>
+    <com.release.wanandroid.widget.IToolBar
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+    />
 
 </android.support.design.widget.CoordinatorLayout>

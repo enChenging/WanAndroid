@@ -65,8 +65,8 @@ class CommonActivity : BaseSwipeBackActivity() {
 
     }
 
-    override fun initColor() {
-        super.initColor()
+    override fun initThemeColor() {
+        super.initThemeColor()
         EventBus.getDefault().post(ColorEvent(true, mThemeColor))
     }
 

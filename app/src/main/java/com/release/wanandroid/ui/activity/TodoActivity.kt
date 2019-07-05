@@ -162,8 +162,8 @@ class TodoActivity : BaseSwipeBackActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun initColor() {
-        super.initColor()
+    override fun initThemeColor() {
+        super.initThemeColor()
         refreshColor(ColorEvent(true))
     }
 

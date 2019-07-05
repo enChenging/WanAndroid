@@ -36,6 +36,7 @@
 
     <color name="White">#FFFFFF</color>
     <color name="Black">#000000</color>
+    <color name="Black_alpha_32">#32000000</color>
     <color name="Red">#f44336</color>
     <color name="Pink">#e91e63</color>
     <color name="Purple">#9c27b0</color>
@@ -43,6 +44,7 @@
     <color name="Indigo">#3f51b5</color>
     <color name="Blue">#2196f3</color>
     <color name="Light_Blue">#03a9f4</color>
+    <color name="Turquoise_Blue">#94C0F9</color>
     <color name="Cyan">#00bcd4</color>
     <color name="Teal">#009688</color>
     <color name="Green">#4caf50</color>

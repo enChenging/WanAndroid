@@ -1,6 +1,7 @@
 package com.release.wanandroid.ui.login
 
 import android.content.Intent
+import android.graphics.drawable.GradientDrawable
 import android.view.View
 import com.release.wanandroid.R
 import com.release.wanandroid.base.BaseMvpActivity
@@ -19,8 +20,11 @@ import org.greenrobot.eventbus.EventBus
  * @create 2019/6/25
  * @Describe
  */
-class LoginActivity :BaseMvpActivity<LoginContract.View,LoginContract.Presenter>(),LoginContract.View{
+class LoginActivity : BaseMvpActivity<LoginContract.View, LoginContract.Presenter>(), LoginContract.View {
 
+    override fun createPresenter(): LoginContract.Presenter = LoginPresenter()
+
+    override fun initLayoutID(): Int = R.layout.activity_login
     /**
      * local username
      */
@@ -36,13 +40,16 @@ class LoginActivity :BaseMvpActivity<LoginContract.View,LoginContract.Presenter>
      */
     private var token: String by Preference(Constant.TOKEN_KEY, "")
 
-    override fun createPresenter(): LoginContract.Presenter = LoginPresenter()
-
-    override fun initLayoutID(): Int  = R.layout.activity_login
 
     override fun initView() {
         super.initView()
         et_username.setText(user)
+
+        (btn_login.background as GradientDrawable).run {
+            setColor(mThemeColor)
+
+        }
+
         btn_login.setOnClickListener(onClickListener)
         tv_sign_up.setOnClickListener(onClickListener)
     }
@@ -62,13 +69,13 @@ class LoginActivity :BaseMvpActivity<LoginContract.View,LoginContract.Presenter>
 
     }
 
-    private val onClickListener = View.OnClickListener {view->
-        when(view.id){
-            R.id.btn_login ->{
+    private val onClickListener = View.OnClickListener { view ->
+        when (view.id) {
+            R.id.btn_login -> {
                 login()
             }
-            R.id.tv_sign_up ->{
-                val intent = Intent(this,RegisterActivity::class.java)
+            R.id.tv_sign_up -> {
+                val intent = Intent(this, RegisterActivity::class.java)
                 startActivity(intent)
                 finish()
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -77,17 +84,17 @@ class LoginActivity :BaseMvpActivity<LoginContract.View,LoginContract.Presenter>
     }
 
     private fun login() {
-        if(validate()){
-            mPresenter?.loginWanAndroid(et_username.text.toString(),et_password.text.toString())
+        if (validate()) {
+            mPresenter?.loginWanAndroid(et_username.text.toString(), et_password.text.toString())
         }
     }
 
-    private fun validate():Boolean{
+    private fun validate(): Boolean {
         var valid = true
-        val username:String = et_username.text.toString()
-        val password:String  = et_password.text.toString()
-        if (username.isEmpty()){
-            et_username.error=getString(R.string.username_not_empty)
+        val username: String = et_username.text.toString()
+        val password: String = et_password.text.toString()
+        if (username.isEmpty()) {
+            et_username.error = getString(R.string.username_not_empty)
             valid = false
         }
         if (password.isEmpty()) {

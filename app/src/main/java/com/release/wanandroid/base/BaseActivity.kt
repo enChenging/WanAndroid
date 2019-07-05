@@ -13,8 +13,6 @@ import android.view.*
 import com.afollestad.materialdialogs.color.CircleView
 import com.classic.common.MultipleStatusView
 import com.cxz.wanandroid.receiver.NetworkChangeReceiver
-import com.just.agentweb.AgentWebUtils.checkNetwork
-import com.orhanobut.logger.Logger
 import com.release.wanandroid.R
 import com.release.wanandroid.constant.Constant
 import com.release.wanandroid.event.NetworkChangeEvent
@@ -39,19 +37,13 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected var mLayoutStatusView: MultipleStatusView? = null
 
-    open  fun useEventBus():Boolean = false
+    open fun useEventBus(): Boolean = false
 
-    open fun initView() {
+    open fun initView() {}
 
-    }
+    open fun initData() {}
 
-    open fun initData() {
-
-    }
-
-    open fun startNet() {
-
-    }
+    open fun startNet() {}
     /**
      * 提示View
      */
@@ -92,21 +84,12 @@ abstract class BaseActivity : AppCompatActivity() {
         initTipView()
         initView()
         startNet()
-        initListener()
-    }
-
-    private fun initListener() {
-        mLayoutStatusView?.setOnClickListener { startNet() }
     }
 
     override fun onResume() {
-        // 动态注册网络变化广播
-        val filter = IntentFilter()
-        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE")
-        mNetworkChangeReceiver = NetworkChangeReceiver()
-        registerReceiver(mNetworkChangeReceiver, filter)
         super.onResume()
-        initColor()
+        initReceiver()
+        initThemeColor()
 
         // 在无网络情况下打开APP时，系统不会发送网络状况变更的Intent，需要自己手动检查
 
@@ -124,18 +107,27 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onPause()
     }
 
-    open fun initColor() {
-        mThemeColor = if (!SettingUtil.getIsAutoNightMode()) {
+    private fun initReceiver() {
+        // 动态注册网络变化广播
+        val filter = IntentFilter()
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE")
+        mNetworkChangeReceiver = NetworkChangeReceiver()
+        registerReceiver(mNetworkChangeReceiver, filter)
+    }
+
+    open fun initThemeColor() {
+        mThemeColor = if (!SettingUtil.getIsNightMode())
             SettingUtil.getColor()
-        } else {
+        else
             resources.getColor(R.color.colorPrimary)
-        }
 
         StatusBarUtil.setColor(this, mThemeColor, 0)
+
+        //ActionBar颜色
         if (this.supportActionBar != null) {
             this.supportActionBar?.setBackgroundDrawable(ColorDrawable(mThemeColor))
         }
-
+        //底部带返回键手机的导航栏颜色
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (SettingUtil.getNavBar()) {
                 window.navigationBarColor = CircleView.shiftColorDown(mThemeColor)
@@ -144,6 +136,7 @@ abstract class BaseActivity : AppCompatActivity() {
             }
         }
     }
+
 
     /**
      * 初始化 TipView
@@ -156,7 +149,8 @@ abstract class BaseActivity : AppCompatActivity() {
             ViewGroup.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.TYPE_APPLICATION,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-            PixelFormat.TRANSLUCENT)
+            PixelFormat.TRANSLUCENT
+        )
         mLayoutParams.gravity = Gravity.TOP
         mLayoutParams.x = 0
         mLayoutParams.y = 0
@@ -196,7 +190,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if(useEventBus())
+        if (useEventBus())
             EventBus.getDefault().unregister(this)
         CommonUtil.fixInputMethodManagerLeak(this)
     }

@@ -10,18 +10,15 @@
         tools:openDrawer="start"
         tools:context=".MainActivity">
 
-    <android.support.design.widget.CoordinatorLayout
+    <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-        <include layout="@layout/toolbar" />
 
         <android.support.v4.view.ViewPager
                 android:id="@+id/vp_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/viewBackground"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
 
         <android.support.design.widget.BottomNavigationView
@@ -43,14 +40,15 @@
                 android:id="@+id/floating_action_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
                 android:layout_marginEnd="@dimen/dp_20"
                 android:layout_marginRight="@dimen/dp_20"
                 android:layout_marginBottom="@dimen/dp_60"
                 app:layout_behavior="com.cxz.wanandroid.widget.behavior.ScaleDownShowBehavior"
                 app:srcCompat="@drawable/ic_arrow_upward_white_24dp" />
 
-    </android.support.design.widget.CoordinatorLayout>
+    </RelativeLayout>
 
     <android.support.design.widget.NavigationView
             android:id="@+id/nav_view"

@@ -81,7 +81,7 @@ class SettingActivity : BaseSwipeBackActivity(), ColorChooserDialog.ColorCallbac
         if (!dialog.isAccentMode) {
             SettingUtil.setColor(selectedColor)
         }
-        initColor()
+        initThemeColor()
         EventBus.getDefault().post(ColorEvent(true))
     }
 

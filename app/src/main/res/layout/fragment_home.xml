@@ -11,8 +11,13 @@
         app:loadingView="@layout/layout_loading_view"
         app:noNetworkView="@layout/layout_network_view">
 
+    <include
+            android:id="@+id/top_search"
+            layout="@layout/layout_top_search"/>
+
     <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
+            android:layout_below="@id/top_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/viewBackground">

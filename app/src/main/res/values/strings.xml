@@ -41,6 +41,7 @@
     <string name="cancel_collect_success">已取消收藏</string>
     <string name="new_fresh">新</string>
     <string name="top_tip">置顶</string>
+    <string name="please_input_search_content">请输入搜索内容</string>
 
     <!-- Login -->
     <string name="username">用户名</string>

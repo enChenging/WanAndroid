@@ -1,6 +1,5 @@
 package com.release.wanandroid
 
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -9,14 +8,14 @@ import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
-import android.support.v4.view.ViewPager
-import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatDelegate
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import com.orhanobut.logger.Logger
 import com.release.wanandroid.base.BaseMvpActivity
 import com.release.wanandroid.constant.Constant
 import com.release.wanandroid.event.ColorEvent
@@ -34,8 +33,8 @@ import com.release.wanandroid.ui.login.LoginActivity
 import com.release.wanandroid.utils.DialogUtil
 import com.release.wanandroid.utils.Preference
 import com.release.wanandroid.utils.SettingUtil
+import com.release.wanandroid.utils.StatusBarUtil
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.toolbar.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -50,6 +49,8 @@ import org.jetbrains.anko.uiThread
 class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(), MainContract.View {
 
     override fun createPresenter(): MainContract.Presenter = MainPresenter()
+
+    override fun initLayoutID(): Int = R.layout.activity_main
 
     private val BOTTOM_INDEX: String = "bottom_index"
 
@@ -85,13 +86,6 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         )
 
 
-    private val mAdapter: ViewPagerAdapter by lazy {
-        ViewPagerAdapter(fragments, supportFragmentManager)
-    }
-
-    override fun initLayoutID(): Int = R.layout.activity_main
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         if (savedInstanceState != null) {
             mIndex = savedInstanceState?.getInt(BOTTOM_INDEX)
@@ -104,16 +98,19 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         outState?.putInt(BOTTOM_INDEX, mIndex)
     }
 
+    open fun search() {
+        Intent(this, SearchActivity::class.java).run {
+            startActivity(this)
+        }
+    }
+
     var nav_mode: MenuItem? = null
     override fun initView() {
         super.initView()
-        toolbar.run {
-            title = resources.getString(R.string.app_name)
-            setSupportActionBar(this)
-        }
-
         bottom_navigation.run {
-
+            // 以前使用 BottomNavigationViewHelper.disableShiftMode(this) 方法来设置底部图标和字体都显示并去掉点击动画
+            // 升级到 28.0.0 之后，官方重构了 BottomNavigationView ，目前可以使用 labelVisibilityMode = 1 来替代
+            // BottomNavigationViewHelper.disableShiftMode(this)
             labelVisibilityMode = 1
             setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         }
@@ -148,71 +145,41 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         }
 
         naviTag(mIndex)
-
         floating_action_btn.run {
             setOnClickListener(onFABClickListener)
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_activity_main, menu)
-        return super.onCreateOptionsMenu(menu)
+    private fun naviTag(position: Int) {
+        mIndex = position
+        vp_main.currentItem = position
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.action_search -> {
-                Intent(this, SearchActivity::class.java).run {
-                    startActivity(this)
-                }
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
+    private val mAdapter: ViewPagerAdapter by lazy {
+        ViewPagerAdapter(fragments, supportFragmentManager)
     }
 
-    private var mExitTime: Long = 0
+    override fun initData() {
+        fragments.clear()
+        fragments.add(HomeFragment.getInstance())
+        fragments.add(KnowledgeTreeFragment.getInstance())
+        fragments.add(WeChatFragment.getInstance())
+        fragments.add(NavigationFragment.getInstance())
+        fragments.add(ProjectFragment.getInstance())
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (System.currentTimeMillis().minus(mExitTime) <= 2000) {
-                finish()
-            } else {
-                mExitTime = System.currentTimeMillis()
-                showToast(getString(R.string.exit_tip))
-            }
-            return true
-        }
-        return super.onKeyDown(keyCode, event)
-    }
-
-    /**
-     * FAB 监听
-     */
-    private val onFABClickListener = View.OnClickListener {
-        when (mIndex) {
-            FRAGMENT_HOME -> {
-                (fragments[FRAGMENT_HOME] as HomeFragment).scrollToTop()
-            }
-            FRAGMENT_KNOWLEDGE -> {
-                (fragments[FRAGMENT_KNOWLEDGE] as KnowledgeFragment).scrollToTop()
-            }
-            FRAGMENT_NAVIGATION -> {
-                (fragments[FRAGMENT_NAVIGATION] as NavigationFragment).scrollToTop()
-            }
-            FRAGMENT_PROJECT -> {
-                (fragments[FRAGMENT_PROJECT] as ProjectFragment).scrollToTop()
-            }
-            FRAGMENT_WECHAT -> {
-                (fragments[FRAGMENT_WECHAT] as WeChatFragment).scrollToTop()
-            }
+        vp_main.run {
+            adapter = mAdapter
+            offscreenPageLimit = 5
         }
     }
 
-    override fun initColor() {
-        super.initColor()
+
+    override fun initThemeColor() {
+        super.initThemeColor()
+        StatusBarUtil.setColorForDrawerLayout(this, drawer_layout, mThemeColor, 0)
         refreshColor(ColorEvent(true))
     }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun refreshColor(event: ColorEvent) {
@@ -236,46 +203,47 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
     }
 
     private fun initDrawerLayout() {
-        drawer_layout.run {
-            val toggle = ActionBarDrawerToggle(
-                this@MainActivity,
-                this, toolbar,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close
-            )
-            addDrawerListener(toggle)
-            toggle.syncState()
-        }
+
+        drawer_layout.setScrimColor(resources.getColor(R.color.Black_alpha_32))
+        drawer_layout.addDrawerListener(object : DrawerLayout.DrawerListener {
+
+            override fun onDrawerStateChanged(newState: Int) {
+            }
+
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+                drawer_layout.getChildAt(0).translationX = drawerView.width * slideOffset
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+            }
+
+            override fun onDrawerOpened(drawerView: View) {
+            }
+
+        })
     }
 
-    override fun initData() {
-        fragments.clear()
-        fragments.add(HomeFragment.getInstance())
-        fragments.add(KnowledgeTreeFragment.getInstance())
-        fragments.add(WeChatFragment.getInstance())
-        fragments.add(NavigationFragment.getInstance())
-        fragments.add(ProjectFragment.getInstance())
 
-
-
-        vp_main.run {
-            adapter = mAdapter
-            offscreenPageLimit = 5
-
-            addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-                override fun onPageScrollStateChanged(state: Int) {
-
-                }
-
-                override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
-
-                }
-
-                override fun onPageSelected(p0: Int) {
-                    bottom_navigation.menu.getItem(p0).isChecked = true
-                    toolbar.title = mTitles[p0]
-                }
-            })
+    /**
+     * FAB 监听
+     */
+    private val onFABClickListener = View.OnClickListener {
+        when (mIndex) {
+            FRAGMENT_HOME -> {
+                (fragments[FRAGMENT_HOME] as HomeFragment).scrollToTop()
+            }
+            FRAGMENT_KNOWLEDGE -> {
+                (fragments[FRAGMENT_KNOWLEDGE] as KnowledgeFragment).scrollToTop()
+            }
+            FRAGMENT_NAVIGATION -> {
+                (fragments[FRAGMENT_NAVIGATION] as NavigationFragment).scrollToTop()
+            }
+            FRAGMENT_PROJECT -> {
+                (fragments[FRAGMENT_PROJECT] as ProjectFragment).scrollToTop()
+            }
+            FRAGMENT_WECHAT -> {
+                (fragments[FRAGMENT_WECHAT] as WeChatFragment).scrollToTop()
+            }
         }
     }
 
@@ -310,11 +278,6 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             }
         }
 
-    private fun naviTag(position: Int) {
-        mIndex = position
-        vp_main.currentItem = position
-        toolbar.title = mTitles[position]
-    }
 
     /**
      * NavigationView 监听
@@ -334,24 +297,20 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
                             startActivity(this)
                         }
                     }
-                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_setting -> {
                     Intent(this@MainActivity, SettingActivity::class.java).run {
                         startActivity(this)
                     }
-                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_about_us -> {
                     Intent(this@MainActivity, CommonActivity::class.java).run {
                         putExtra(Constant.TYPE_KEY, Constant.Type.ABOUT_US_TYPE_KEY)
                         startActivity(this)
                     }
-                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_logout -> {
                     logout()
-                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_night_mode -> {
                     if (SettingUtil.getIsNightMode()) {
@@ -378,11 +337,19 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
                             startActivity(this)
                         }
                     }
-                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
             }
+            toggle()
             true
         }
+
+    open fun toggle() {
+        val drawerLockMode = drawer_layout.getDrawerLockMode(GravityCompat.START)
+        if (drawer_layout.isDrawerVisible(GravityCompat.START) && drawerLockMode != DrawerLayout.LOCK_MODE_LOCKED_OPEN)
+            drawer_layout.closeDrawer(GravityCompat.START)
+        else if (drawerLockMode != DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            drawer_layout.openDrawer(GravityCompat.START)
+    }
 
 
     /**
@@ -420,6 +387,22 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             }
         }
     }
+
+    private var mExitTime: Long = 0
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (System.currentTimeMillis().minus(mExitTime) <= 2000) {
+                finish()
+            } else {
+                mExitTime = System.currentTimeMillis()
+                showToast(getString(R.string.exit_tip))
+            }
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
 }
 
 

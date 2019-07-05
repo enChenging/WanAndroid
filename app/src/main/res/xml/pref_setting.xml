@@ -22,38 +22,17 @@
             android:summary="@string/auto_night_mode_summary"
             android:title="@string/auto_night_mode" />
 
-        <!--<Preference-->
-        <!--android:key="text_size"-->
-        <!--android:summary="设置字体大小"-->
-        <!--android:title="字体大小"/>-->
 
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/other_setting">
 
-        <!--<com.cxz.wanandroid.widget.IconListPreference-->
-        <!--android:defaultValue="0"-->
-        <!--android:entries="@array/icons"-->
-        <!--android:entryValues="@array/iconsValues"-->
-        <!--android:key="custom_icon"-->
-        <!--android:summary="@string/choose_icon_summary"-->
-        <!--android:title="@string/choose_icon"-->
-        <!--app:iconsDrawables="@array/iconsDrawables"/>-->
 
         <com.release.wanandroid.widget.IconPreference
             android:key="color"
             android:layout="@layout/custom_preference_layout"
             android:summary="@string/choose_theme_color_summary"
             android:title="@string/choose_theme_color" />
-
-        <!--<ListPreference-->
-        <!--android:defaultValue="1"-->
-        <!--android:entries="@array/slidable"-->
-        <!--android:entryValues="@array/slidableValues"-->
-        <!--android:key="slidable"-->
-        <!--android:negativeButtonText="@string/cancel"-->
-        <!--android:summary="@string/slidable_summary"-->
-        <!--android:title="@string/slidable_title"/>-->
 
         <CheckBoxPreference
             android:defaultValue="false"
@@ -81,11 +60,6 @@
             android:layout="@layout/custom_preference_layout"
             android:summary="@string/changelog_url"
             android:title="@string/changelog" />
-
-        <!--<Preference-->
-        <!--android:key="licenses"-->
-        <!--android:summary="@string/about_libraries_summary"-->
-        <!--android:title="@string/about_libraries_label" />-->
 
         <Preference
             android:key="sourceCode"

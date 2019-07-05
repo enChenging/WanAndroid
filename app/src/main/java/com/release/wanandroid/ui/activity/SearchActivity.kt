@@ -158,7 +158,7 @@ class SearchActivity : BaseMvpSwipeBackActivity<SearchContract.View, SearchContr
             val field = searchView.javaClass.getDeclaredField("mGoButton")
             field.isAccessible = true
             val mGoButton = field.get(searchView) as ImageView
-            mGoButton.setImageResource(R.drawable.ic_search_white_24dp)
+            mGoButton.setImageResource(R.drawable.ic_search)
         } catch (e: Exception) {
             e.printStackTrace()
         }

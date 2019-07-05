@@ -83,8 +83,8 @@ class KnowledgeActivity : BaseSwipeBackActivity() {
         }
     }
 
-    override fun initColor() {
-        super.initColor()
+    override fun initThemeColor() {
+        super.initThemeColor()
         refreshColor(ColorEvent(true))
     }
 

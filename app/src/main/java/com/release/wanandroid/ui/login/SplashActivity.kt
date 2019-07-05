@@ -49,8 +49,7 @@ class SplashActivity : BaseActivity() {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
-    override fun initColor() {
+    override fun initThemeColor() {
         StatusBarUtil.setTranslucent(this, 0)
     }
-
 }

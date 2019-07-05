@@ -63,18 +63,12 @@ abstract class BaseFragment : Fragment() {
         initData()
         initView(view)
         lazyLoadDataIfPrepared()
-        //多种状态切换的view 重试点击事件
-        mLayoutStatusView?.setOnClickListener(mRetryClickListener)
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser)
             lazyLoadDataIfPrepared()
-    }
-
-    open val mRetryClickListener: View.OnClickListener = View.OnClickListener {
-        lazyLoad()
     }
 
     private fun lazyLoadDataIfPrepared() {
