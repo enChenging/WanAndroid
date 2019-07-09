@@ -5,11 +5,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/viewBackground"
-        android:orientation="vertical">
+        >
 
-    <com.release.wanandroid.widget.IToolBar
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-    />
+    <include layout="@layout/toolbar" />
 
 </android.support.design.widget.CoordinatorLayout>

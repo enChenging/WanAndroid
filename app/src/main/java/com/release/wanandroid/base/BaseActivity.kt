@@ -13,10 +13,12 @@ import android.view.*
 import com.afollestad.materialdialogs.color.CircleView
 import com.classic.common.MultipleStatusView
 import com.cxz.wanandroid.receiver.NetworkChangeReceiver
+import com.release.wanandroid.MainActivity
 import com.release.wanandroid.R
 import com.release.wanandroid.constant.Constant
 import com.release.wanandroid.event.NetworkChangeEvent
 import com.release.wanandroid.utils.*
+import kotlinx.android.synthetic.main.toolbar.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -84,6 +86,21 @@ abstract class BaseActivity : AppCompatActivity() {
         initTipView()
         initView()
         startNet()
+    }
+
+    open fun initToolBar() {
+        toolbar.apply {
+            title = ""
+            setSupportActionBar(this)
+        }
+
+        iv_left.apply {
+            setOnClickListener {
+                if (this@BaseActivity !is MainActivity) {
+                    finish()
+                }
+            }
+        }
     }
 
     override fun onResume() {

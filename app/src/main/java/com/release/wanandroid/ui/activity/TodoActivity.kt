@@ -48,11 +48,10 @@ class TodoActivity : BaseSwipeBackActivity() {
     }
 
     override fun initView() {
-        toolbar.run {
-            title = datas[0].name // getString(R.string.nav_todo)
-            setSupportActionBar(this)
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+
+        initToolBar()
+        tv_title.text = datas[0].name
+
         bottom_navigation.run {
             // 以前使用 BottomNavigationViewHelper.disableShiftMode(this) 方法来设置底部图标和字体都显示并去掉点击动画
             // 升级到 28.0.0 之后，官方重构了 BottomNavigationView ，目前可以使用 labelVisibilityMode = 1 来替代
@@ -98,7 +97,8 @@ class TodoActivity : BaseSwipeBackActivity() {
             mSwitchPopupWindow?.dismiss()
             val itemData = adapter.data[position] as TodoTypeBean
             mType = itemData.type
-            toolbar.title = itemData.name
+
+            tv_title.text = itemData.name
             adapter.data.forEachIndexed { index, any ->
                 val item = any as TodoTypeBean
                 item.isSelected = index == position
@@ -178,20 +178,20 @@ class TodoActivity : BaseSwipeBackActivity() {
      * NavigationItemSelect监听
      */
     private val onNavigationItemSelectedListener =
-            BottomNavigationView.OnNavigationItemSelectedListener { item ->
-                return@OnNavigationItemSelectedListener when (item.itemId) {
-                    R.id.action_notodo -> {
-                        EventBus.getDefault().post(TodoEvent(Constant.TODO_NO, mType))
-                        true
-                    }
-                    R.id.action_completed -> {
-                        EventBus.getDefault().post(TodoEvent(Constant.TODO_DONE, mType))
-                        true
-                    }
-                    else -> {
-                        false
-                    }
+        BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            return@OnNavigationItemSelectedListener when (item.itemId) {
+                R.id.action_notodo -> {
+                    EventBus.getDefault().post(TodoEvent(Constant.TODO_NO, mType))
+                    true
+                }
+                R.id.action_completed -> {
+                    EventBus.getDefault().post(TodoEvent(Constant.TODO_DONE, mType))
+                    true
+                }
+                else -> {
+                    false
                 }
             }
+        }
 
 }

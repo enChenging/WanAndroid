@@ -3,8 +3,6 @@ package com.release.wanandroid.ui.activity
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.support.design.widget.TabLayout
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import com.release.wanandroid.R
 import com.release.wanandroid.base.BaseSwipeBackActivity
@@ -61,9 +59,12 @@ class KnowledgeActivity : BaseSwipeBackActivity() {
     override fun initView() {
         super.initView()
         toolbar.run {
-            title = toolbarTitle
+            title = ""
+            tv_title.text = toolbarTitle
             setSupportActionBar(this)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+            iv_right.setOnClickListener { shares() }
         }
 
         viewPager.run {
@@ -80,6 +81,23 @@ class KnowledgeActivity : BaseSwipeBackActivity() {
 
         floating_action_btn.run {
             setOnClickListener(onFABClickListener)
+        }
+    }
+
+    private fun shares() {
+        Intent().run {
+            action = Intent.ACTION_SEND
+            putExtra(
+                Intent.EXTRA_TEXT,
+                getString(
+                    R.string.share_article_url,
+                    getString(R.string.app_name),
+                    knowledges[tabLayout.selectedTabPosition].name,
+                    knowledges[tabLayout.selectedTabPosition].id.toString()
+                )
+            )
+            type = Constant.CONTENT_SHARE_TYPE
+            startActivity(Intent.createChooser(this, getString(R.string.action_share)))
         }
     }
 
@@ -126,33 +144,5 @@ class KnowledgeActivity : BaseSwipeBackActivity() {
         }
         val fragment: KnowledgeFragment = viewPagerAdapter.getItem(viewPager.currentItem) as KnowledgeFragment
         fragment.scrollToTop()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_type_content, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.action_share -> {
-                Intent().run {
-                    action = Intent.ACTION_SEND
-                    putExtra(
-                        Intent.EXTRA_TEXT,
-                        getString(
-                            R.string.share_article_url,
-                            getString(R.string.app_name),
-                            knowledges[tabLayout.selectedTabPosition].name,
-                            knowledges[tabLayout.selectedTabPosition].id.toString()
-                        )
-                    )
-                    type = Constant.CONTENT_SHARE_TYPE
-                    startActivity(Intent.createChooser(this, getString(R.string.action_share)))
-                }
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 }

@@ -11,11 +11,9 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatDelegate
 import android.view.KeyEvent
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
-import com.orhanobut.logger.Logger
 import com.release.wanandroid.base.BaseMvpActivity
 import com.release.wanandroid.constant.Constant
 import com.release.wanandroid.event.ColorEvent
@@ -35,6 +33,7 @@ import com.release.wanandroid.utils.Preference
 import com.release.wanandroid.utils.SettingUtil
 import com.release.wanandroid.utils.StatusBarUtil
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.toolbar.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -98,15 +97,26 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         outState?.putInt(BOTTOM_INDEX, mIndex)
     }
 
-    open fun search() {
-        Intent(this, SearchActivity::class.java).run {
-            startActivity(this)
-        }
-    }
-
     var nav_mode: MenuItem? = null
+
     override fun initView() {
         super.initView()
+
+        initToolBar()
+        toolbar.run {
+            tv_title.text = getString(R.string.home)
+            iv_right.setOnClickListener {
+                goSearch()
+            }
+
+            iv_left.apply {
+                setImageResource(R.drawable.ic_person)
+                setOnClickListener {
+                    toggle()
+                }
+            }
+        }
+
         bottom_navigation.run {
             // 以前使用 BottomNavigationViewHelper.disableShiftMode(this) 方法来设置底部图标和字体都显示并去掉点击动画
             // 升级到 28.0.0 之后，官方重构了 BottomNavigationView ，目前可以使用 labelVisibilityMode = 1 来替代
@@ -150,9 +160,28 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         }
     }
 
+    private fun goSearch() {
+        Intent(this, SearchActivity::class.java).run {
+            startActivity(this)
+        }
+
+    }
+
     private fun naviTag(position: Int) {
         mIndex = position
         vp_main.currentItem = position
+        toolbar.run {
+            tv_title.text = mTitles[position]
+
+            if (position == FRAGMENT_HOME) {
+                iv_left.visibility = View.VISIBLE
+                iv_right.visibility = View.VISIBLE
+            } else {
+                iv_left.visibility = View.INVISIBLE
+                iv_right.visibility = View.INVISIBLE
+            }
+        }
+
     }
 
     private val mAdapter: ViewPagerAdapter by lazy {
@@ -204,23 +233,26 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
 
     private fun initDrawerLayout() {
 
-        drawer_layout.setScrimColor(resources.getColor(R.color.Black_alpha_32))
-        drawer_layout.addDrawerListener(object : DrawerLayout.DrawerListener {
+        drawer_layout.run {
+            setScrimColor(resources.getColor(R.color.Black_alpha_32))
 
-            override fun onDrawerStateChanged(newState: Int) {
-            }
+            addDrawerListener(object : DrawerLayout.DrawerListener {
 
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-                drawer_layout.getChildAt(0).translationX = drawerView.width * slideOffset
-            }
+                override fun onDrawerStateChanged(newState: Int) {
+                }
 
-            override fun onDrawerClosed(drawerView: View) {
-            }
+                override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+                    drawer_layout.getChildAt(0).translationX = drawerView.width * slideOffset
+                }
 
-            override fun onDrawerOpened(drawerView: View) {
-            }
+                override fun onDrawerClosed(drawerView: View) {
+                }
 
-        })
+                override fun onDrawerOpened(drawerView: View) {
+                }
+
+            })
+        }
     }
 
 

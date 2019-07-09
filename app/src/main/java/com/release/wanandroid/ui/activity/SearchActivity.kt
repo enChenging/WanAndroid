@@ -94,7 +94,6 @@ class SearchActivity : BaseMvpSwipeBackActivity<SearchContract.View, SearchContr
             layoutManager = linearLayoutManager
             adapter = searchHistoryAdapter
             itemAnimator = DefaultItemAnimator()
-            // addItemDecoration(recyclerViewItemDecoration)
         }
 
         searchHistoryAdapter.run {
@@ -150,15 +149,19 @@ class SearchActivity : BaseMvpSwipeBackActivity<SearchContract.View, SearchContr
         menuInflater.inflate(R.menu.menu_search, menu)
         val searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
         searchView.maxWidth = Integer.MAX_VALUE
+        //设置搜索框直接展开显示。左侧有无放大镜  右侧无叉叉 有输入内容后有叉叉 不能关闭搜索框
         searchView.onActionViewExpanded()
+        //设置输入框提示语
         searchView.queryHint = getString(R.string.search_tint)
-        searchView.setOnQueryTextListener(queryTextListener)
+        //设置是否显示搜索框展开时的提交按钮
         searchView.isSubmitButtonEnabled = true
+
+        searchView.setOnQueryTextListener(queryTextListener)
         try {
             val field = searchView.javaClass.getDeclaredField("mGoButton")
             field.isAccessible = true
             val mGoButton = field.get(searchView) as ImageView
-            mGoButton.setImageResource(R.drawable.ic_search)
+            mGoButton.setImageResource(R.drawable.ic_search_white_24dp)
         } catch (e: Exception) {
             e.printStackTrace()
         }

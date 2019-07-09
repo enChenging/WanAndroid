@@ -45,6 +45,8 @@ class SearchListFragment : BaseMvpFragment<SearchListContract.View, SearchListCo
         }
     }
 
+    override fun initLayoutID(): Int = R.layout.fragment_search_list
+
     override fun createPresenter(): SearchListContract.Presenter = SearchListPresenter()
 
     override fun useEventBus(): Boolean = true
@@ -106,7 +108,7 @@ class SearchListFragment : BaseMvpFragment<SearchListContract.View, SearchListCo
         }
     }
 
-    override fun initLayoutID(): Int = R.layout.fragment_search_list
+
 
     override fun initView(view: View) {
         super.initView(view)

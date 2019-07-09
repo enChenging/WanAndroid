@@ -13,7 +13,6 @@ import android.view.View
 import android.webkit.*
 import com.just.agentweb.AgentWeb
 import com.just.agentweb.NestedScrollAgentWebView
-import com.orhanobut.logger.Logger
 import com.release.wanandroid.R
 import com.release.wanandroid.base.BaseMvpSwipeBackActivity
 import com.release.wanandroid.constant.Constant
@@ -62,18 +61,21 @@ class WebActivity : BaseMvpSwipeBackActivity<WebContracnt.View, WebContracnt.Pre
 
     override fun initView() {
         super.initView()
-        toolbar.apply {
-            title = ""
-            setSupportActionBar(this)
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
 
-        tv_title.apply {
-            text = getString(R.string.loading)
-            visibility = View.VISIBLE
-            postDelayed({
-                tv_title.isSelected = true
-            }, 2000)
+        initToolBar()
+        toolbar.apply {
+            tv_title.apply {
+                text = getString(R.string.loading)
+                postDelayed({
+                    tv_title.isSelected = true
+                }, 2000)
+            }
+
+//            iv_right.apply {
+//                visibility = View.VISIBLE
+//                setImageResource(R.drawable.ic_more_vert_white_24dp)
+//            }
+
         }
 
         intent.extras?.let {
@@ -95,7 +97,8 @@ class WebActivity : BaseMvpSwipeBackActivity<WebContracnt.View, WebContracnt.Pre
             layoutParams,
             mWebView,
             webChromeClient,
-            webViewClient)
+            webViewClient
+        )
 
         agentWeb?.webCreator?.webView?.let {
             it.settings.domStorageEnabled = true

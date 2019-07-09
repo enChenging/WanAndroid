@@ -11,7 +11,6 @@ import cn.bingoogolapple.bgabanner.BGABanner
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.orhanobut.logger.Logger
 import com.release.wanandroid.App
-import com.release.wanandroid.MainActivity
 import com.release.wanandroid.R
 import com.release.wanandroid.base.BaseMvpFragment
 import com.release.wanandroid.constant.Constant
@@ -31,7 +30,6 @@ import com.release.wanandroid.widget.SpaceItemDecoration
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.item_home_banner.view.*
-import kotlinx.android.synthetic.main.layout_top_search.*
 
 /**
  * @author Mr.release
@@ -96,7 +94,7 @@ class HomeFragment : BaseMvpFragment<HomeContract.View, HomeContract.Presenter>(
     }
 
 
-    override fun initView(view:View) {
+    override fun initView(view: View) {
         super.initView(view)
         mLayoutStatusView = multiple_status_view
 
@@ -123,30 +121,12 @@ class HomeFragment : BaseMvpFragment<HomeContract.View, HomeContract.Presenter>(
             onItemChildClickListener = this@HomeFragment.onItemChildClickListener
             addHeaderView(bannerView)
         }
-
-        iv_setting.run {
-            setOnClickListener {
-                (activity as MainActivity).run {
-                    toggle()
-                }
-            }
-        }
-
-        iv_search.run {
-            setOnClickListener {
-                (activity as MainActivity).run {
-                    search()
-                }
-            }
-        }
     }
 
     override fun lazyLoad() {
         mLayoutStatusView?.showLoading()
         mPresenter?.requestHomeData()
     }
-
-
 
 
     override fun scrollToTop() {
@@ -245,9 +225,9 @@ class HomeFragment : BaseMvpFragment<HomeContract.View, HomeContract.Presenter>(
         super.showError(errorMsg)
         mLayoutStatusView?.showError()
         homeAdapter.run {
-            if(isRefresh){
+            if (isRefresh) {
                 setEnableLoadMore(true)
-            }else
+            } else
                 loadMoreFail()
         }
     }

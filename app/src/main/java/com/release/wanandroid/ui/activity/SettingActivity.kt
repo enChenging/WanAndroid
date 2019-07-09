@@ -10,6 +10,8 @@ import com.release.wanandroid.base.BaseSwipeBackActivity
 import com.release.wanandroid.event.ColorEvent
 import com.release.wanandroid.ui.fragment.SettingFragment
 import com.release.wanandroid.utils.SettingUtil
+import kotlinx.android.synthetic.main.item_todo_list.*
+import kotlinx.android.synthetic.main.item_todo_list.view.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.greenrobot.eventbus.EventBus
 
@@ -40,11 +42,8 @@ class SettingActivity : BaseSwipeBackActivity(), ColorChooserDialog.ColorCallbac
             setupFragment(initFragment, initArguments)
         }
 
-        toolbar.run {
-            title = initTitle
-            setSupportActionBar(this)
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        initToolBar()
+        tv_title.text = initTitle
     }
 
     private fun setupFragment(fragmentName: String, args: Bundle) {
