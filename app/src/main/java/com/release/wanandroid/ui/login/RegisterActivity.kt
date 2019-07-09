@@ -11,7 +11,7 @@ import com.release.wanandroid.mvp.contract.RegisterContract
 import com.release.wanandroid.mvp.model.bean.LoginData
 import com.release.wanandroid.mvp.presenter.RegisterPresenter
 import com.release.wanandroid.utils.DialogUtil
-import com.release.wanandroid.utils.Preference
+import com.release.wanandroid.utils.Sp
 import kotlinx.android.synthetic.main.activity_login.et_password
 import kotlinx.android.synthetic.main.activity_login.et_username
 import kotlinx.android.synthetic.main.activity_register.*
@@ -22,12 +22,12 @@ class RegisterActivity : BaseMvpActivity<RegisterContract.View, RegisterContract
     /**
      * local username
      */
-    private var user: String by Preference(Constant.USERNAME_KEY, "")
+    private var user: String by Sp(Constant.USERNAME_KEY, "")
 
     /**
      * local password
      */
-    private var pwd: String by Preference(Constant.PASSWORD_KEY, "")
+    private var pwd: String by Sp(Constant.PASSWORD_KEY, "")
 
     override fun createPresenter(): RegisterContract.Presenter = RegisterPresenter()
 

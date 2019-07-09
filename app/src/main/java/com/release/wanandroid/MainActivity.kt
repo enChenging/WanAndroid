@@ -19,6 +19,7 @@ import com.release.wanandroid.base.BaseMvpActivity
 import com.release.wanandroid.constant.Constant
 import com.release.wanandroid.event.ColorEvent
 import com.release.wanandroid.event.LoginEvent
+import com.release.wanandroid.event.RefreshHomeEvent
 import com.release.wanandroid.ext.showToast
 import com.release.wanandroid.mvp.contract.MainContract
 import com.release.wanandroid.mvp.presenter.MainPresenter
@@ -30,9 +31,8 @@ import com.release.wanandroid.ui.adapter.ViewPagerAdapter
 import com.release.wanandroid.ui.fragment.*
 import com.release.wanandroid.ui.login.LoginActivity
 import com.release.wanandroid.utils.DialogUtil
-import com.release.wanandroid.utils.Preference
+import com.release.wanandroid.utils.Sp
 import com.release.wanandroid.utils.SettingUtil
-import com.release.wanandroid.utils.StatusBarUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.greenrobot.eventbus.EventBus
@@ -74,7 +74,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
     /**
      * local username
      */
-    private val username: String by Preference(Constant.USERNAME_KEY, "")
+    private val username: String by Sp(Constant.USERNAME_KEY, "")
 
     private var mTitles: Array<String> =
         arrayOf(
@@ -198,6 +198,15 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         if (event.isRefresh) {
             nav_view.getHeaderView(0).setBackgroundColor(mThemeColor)
             floating_action_btn.backgroundTintList = ColorStateList.valueOf(mThemeColor)
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun refreshHomeEvent(event: RefreshHomeEvent) {
+        if (event.isRefresh) {
+            val fragment = fragments[FRAGMENT_HOME]
+            if (fragment is HomeFragment)
+                fragment.lazyLoad()
         }
     }
 
@@ -417,7 +426,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
     override fun showLogoutSuccess(success: Boolean) {
         if (success) {
             doAsync {
-                Preference.clearPreference()
+                Sp.clearPreference()
                 uiThread {
                     mDialog.dismiss()
                     showToast(resources.getString(R.string.logout_success))

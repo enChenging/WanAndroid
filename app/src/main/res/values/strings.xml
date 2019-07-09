@@ -100,7 +100,7 @@
     <string name="slidable_title">滑动返回</string>
     <string name="slidable_summary">类似 iOS 左侧滑动返回</string>
     <string name="auto_night_mode">自动切换夜间模式</string>
-    <string name="auto_night_mode_summary">设置切换的时间</string>
+    <string name="auto_night_mode_summary">按照手机系统的白天黑天模式</string>
     <string name="auto_night_mode_subsummary">重启App生效</string>
     <string name="auto_night_category">时间</string>
     <string name="auto_night_start">夜间模式开始时间</string>

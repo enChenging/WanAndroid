@@ -6,7 +6,7 @@ import android.content.Intent
 import com.release.wanandroid.constant.Constant
 import com.release.wanandroid.event.NetworkChangeEvent
 import com.release.wanandroid.utils.NetWorkUtil
-import com.release.wanandroid.utils.Preference
+import com.release.wanandroid.utils.Sp
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -19,7 +19,7 @@ class NetworkChangeReceiver : BroadcastReceiver() {
     /**
      * 缓存上一次的网络状态
      */
-    private var hasNetwork: Boolean by Preference(Constant.HAS_NETWORK_KEY, true)
+    private var hasNetwork: Boolean by Sp(Constant.HAS_NETWORK_KEY, true)
 
     override fun onReceive(context: Context, intent: Intent) {
         val isConnected = NetWorkUtil.isNetworkConnected(context)

@@ -11,7 +11,7 @@ import com.release.wanandroid.ext.showToast
 import com.release.wanandroid.mvp.contract.LoginContract
 import com.release.wanandroid.mvp.model.bean.LoginData
 import com.release.wanandroid.mvp.presenter.LoginPresenter
-import com.release.wanandroid.utils.Preference
+import com.release.wanandroid.utils.Sp
 import kotlinx.android.synthetic.main.activity_login.*
 import org.greenrobot.eventbus.EventBus
 
@@ -28,17 +28,17 @@ class LoginActivity : BaseMvpActivity<LoginContract.View, LoginContract.Presente
     /**
      * local username
      */
-    private var user: String by Preference(Constant.USERNAME_KEY, "")
+    private var user: String by Sp(Constant.USERNAME_KEY, "")
 
     /**
      * local password
      */
-    private var pwd: String by Preference(Constant.PASSWORD_KEY, "")
+    private var pwd: String by Sp(Constant.PASSWORD_KEY, "")
 
     /**
      * token
      */
-    private var token: String by Preference(Constant.TOKEN_KEY, "")
+    private var token: String by Sp(Constant.TOKEN_KEY, "")
 
 
     override fun initView() {

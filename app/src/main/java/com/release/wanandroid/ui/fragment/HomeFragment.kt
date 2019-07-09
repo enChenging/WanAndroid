@@ -2,8 +2,6 @@ package com.release.wanandroid.ui.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
@@ -12,12 +10,10 @@ import cn.bingoogolapple.bgabanner.BGABanner
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.orhanobut.logger.Logger
 import com.release.wanandroid.App
-import com.release.wanandroid.MainActivity
 import com.release.wanandroid.R
 import com.release.wanandroid.base.BaseActivity
 import com.release.wanandroid.base.BaseMvpFragment
 import com.release.wanandroid.constant.Constant
-import com.release.wanandroid.event.ColorEvent
 import com.release.wanandroid.ext.showSnackMsg
 import com.release.wanandroid.ext.showToast
 import com.release.wanandroid.mvp.contract.HomeContract
@@ -32,14 +28,8 @@ import com.release.wanandroid.utils.ImageLoader
 import com.release.wanandroid.utils.NetWorkUtil
 import com.release.wanandroid.widget.SpaceItemDecoration
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_home.multiple_status_view
-import kotlinx.android.synthetic.main.fragment_home.recyclerView
-import kotlinx.android.synthetic.main.fragment_navigation.*
 import kotlinx.android.synthetic.main.item_home_banner.view.*
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 /**
  * @author Mr.release
@@ -147,7 +137,8 @@ class HomeFragment : BaseMvpFragment<HomeContract.View, HomeContract.Presenter>(
     @SuppressLint("RestrictedApi")
     override fun onResume() {
         super.onResume()
-        refresh_layout.RefreshKernelImpl().refreshLayout.refreshHeader?.setPrimaryColors((activity as BaseActivity).mThemeColor)
+        refresh_layout.RefreshKernelImpl()
+            .refreshLayout.refreshHeader?.setPrimaryColors((activity as BaseActivity).mThemeColor)
     }
 
 

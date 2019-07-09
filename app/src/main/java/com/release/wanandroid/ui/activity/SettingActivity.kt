@@ -1,19 +1,21 @@
 package com.release.wanandroid.ui.activity
 
-import android.app.Fragment
-import android.app.FragmentTransaction
-import android.content.Intent
-import android.os.Bundle
+import android.widget.CompoundButton
 import com.afollestad.materialdialogs.color.ColorChooserDialog
 import com.release.wanandroid.R
 import com.release.wanandroid.base.BaseSwipeBackActivity
 import com.release.wanandroid.event.ColorEvent
-import com.release.wanandroid.ui.fragment.SettingFragment
+import com.release.wanandroid.event.RefreshHomeEvent
+import com.release.wanandroid.rx.SchedulerUtils
+import com.release.wanandroid.ui.fragment.AutoNightModeFragment
+import com.release.wanandroid.utils.CacheDataUtil
 import com.release.wanandroid.utils.SettingUtil
-import kotlinx.android.synthetic.main.item_todo_list.*
-import kotlinx.android.synthetic.main.item_todo_list.view.*
+import com.release.wanandroid.utils.Sp
+import io.reactivex.Observable
+import kotlinx.android.synthetic.main.activity_setting2.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.greenrobot.eventbus.EventBus
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Mr.release
@@ -22,54 +24,69 @@ import org.greenrobot.eventbus.EventBus
  */
 class SettingActivity : BaseSwipeBackActivity(), ColorChooserDialog.ColorCallback {
 
-    private val EXTRA_SHOW_FRAGMENT = "show_fragment"
-    private val EXTRA_SHOW_FRAGMENT_ARGUMENTS = "show_fragment_args"
     private val EXTRA_SHOW_FRAGMENT_TITLE = "show_fragment_title"
 
-    override fun initLayoutID(): Int = R.layout.activity_setting
+    override fun initLayoutID(): Int = R.layout.activity_setting2
 
-    override fun initData() {
-    }
+    var switch_noPhotoMode: Boolean  by Sp("switch_noPhotoMode", false)
+    var auto_nightMode: Boolean  by Sp("auto_nightMode", false)
+    var switch_show_top: Boolean  by Sp("switch_show_top", false)
+    var nav_bar: Boolean  by Sp("nav_bar", false)
+
 
     override fun initView() {
-        val initFragment: String = intent.getStringExtra(EXTRA_SHOW_FRAGMENT) ?: ""
-        val initArguments: Bundle = intent.getBundleExtra(EXTRA_SHOW_FRAGMENT_ARGUMENTS) ?: Bundle()
+
         val initTitle: String = intent.getStringExtra(EXTRA_SHOW_FRAGMENT_TITLE) ?: "设置"
-
-        if (initFragment.isEmpty()) {
-            setupFragment(SettingFragment::class.java.name, initArguments)
-        } else {
-            setupFragment(initFragment, initArguments)
-        }
-
         initToolBar()
         tv_title.text = initTitle
+
+        initListener()
     }
 
-    private fun setupFragment(fragmentName: String, args: Bundle) {
-        val fragment = Fragment.instantiate(this, fragmentName, args)
-        val transaction = fragmentManager.beginTransaction()
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-        transaction.replace(R.id.container, fragment)
-        transaction.commitAllowingStateLoss()
-    }
+    private fun initListener() {
 
-    private fun onBuildStartFragmentIntent(fragmentName: String, args: Bundle?, title: String?): Intent {
-        val intent = Intent(Intent.ACTION_MAIN)
-        intent.setClass(this, javaClass)
-        intent.putExtra(EXTRA_SHOW_FRAGMENT, fragmentName)
-        intent.putExtra(EXTRA_SHOW_FRAGMENT_ARGUMENTS, args)
-        intent.putExtra(EXTRA_SHOW_FRAGMENT_TITLE, title)
-        return intent
-    }
 
-    fun startWithFragment(fragmentName: String, args: Bundle?,
-                          resultTo: Fragment?, resultRequestCode: Int, title: String?) {
-        val intent = onBuildStartFragmentIntent(fragmentName, args, title)
-        if (resultTo == null) {
-            startActivity(intent)
-        } else {
-            resultTo.startActivityForResult(intent, resultRequestCode)
+        sc_no_image.apply {
+            isSelected = switch_noPhotoMode
+            setOnCheckedChangeListener { _, isChecked -> switch_noPhotoMode = isChecked }
+        }
+
+
+        sc_tv_auto_night.apply {
+            isSelected = auto_nightMode
+            setOnCheckedChangeListener { _, isChecked -> auto_nightMode = isChecked }
+        }
+
+        sc_no_image.apply {
+            isSelected = switch_show_top
+            setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    //通知首页刷新数据
+                    // 延迟发送通知：为了保证刷新数据时 SettingUtil.getIsShowTopArticle() 得到最新的值
+                    Observable.timer(100, TimeUnit.MILLISECONDS)
+                        .compose(SchedulerUtils.ioToMain())
+                        .subscribe({
+                            EventBus.getDefault().post(RefreshHomeEvent(true))
+                        }, {})
+                }
+                switch_show_top = isChecked
+            }
+        }
+
+
+        sc_bar_coloration_summary.apply {
+            isSelected = nav_bar
+            setOnCheckedChangeListener { _, isChecked -> nav_bar = isChecked }
+        }
+
+
+        ll_cache.apply {
+
+            setOnClickListener {
+                CacheDataUtil.clearAllCache(context!!)
+//            context?.showSnackMsg(getString(R.string.clear_cache_successfully))
+//            setDefaultText()
+            }
         }
     }
 

@@ -34,7 +34,7 @@
             android:textColor="@color/item_desc"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </RelativeLayout>
-    <!-- Preference should place its actual preference widget here. -->
+    <!-- Sp should place its actual preference widget here. -->
     <LinearLayout
         android:id="@android:id/widget_frame"
         android:layout_width="wrap_content"

@@ -1,8 +1,9 @@
 package com.release.wanandroid.http.interceptor
 
+import com.orhanobut.logger.Logger
 import com.release.wanandroid.constant.Constant
 import com.release.wanandroid.constant.HttpConstant
-import com.release.wanandroid.utils.Preference
+import com.release.wanandroid.utils.Sp
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -16,7 +17,7 @@ class HeaderInterceptor : Interceptor {
     /**
      * token
      */
-    private var token: String by Preference(Constant.TOKEN_KEY, "")
+    private var token: String by Sp(Constant.TOKEN_KEY, "")
 
     override fun intercept(chain: Interceptor.Chain): Response {
 
@@ -29,11 +30,13 @@ class HeaderInterceptor : Interceptor {
 
         val domain = request.url().host()
         val url = request.url().toString()
+        Logger.i("host：$domain")
         if (domain.isNotEmpty() && (url.contains(HttpConstant.COLLECTIONS_WEBSITE)
                         || url.contains(HttpConstant.UNCOLLECTIONS_WEBSITE)
                         || url.contains(HttpConstant.ARTICLE_WEBSITE)
                         || url.contains(HttpConstant.TODO_WEBSITE))) {
-            val spDomain: String by Preference(domain, "")
+
+            val spDomain: String by Sp(domain, "")
             val cookie: String = if (spDomain.isNotEmpty()) spDomain else ""
             if (cookie.isNotEmpty()) {
                 // 将 Cookie 添加到请求头

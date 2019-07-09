@@ -8,6 +8,7 @@
     <color name="line_divider">@color/Grey300</color>
     <color name="viewBackground">@color/White</color>
     <color name="windowBackground">@color/Grey100</color>
+    <color name="comment_line">#dddddd</color>
 
     <!-- item -->
     <color name="common_color">#19191B</color>
@@ -28,11 +29,14 @@
     <color name="arrow_color">@color/Grey700</color>
     <color name="sticky_header_bg">@color/Grey100</color>
 
+    <color name="gray_light">#999999</color>
+    <color name="text_gray_light">#999999</color>
+    <color name="text_black">#333333</color>
+
     <color name="light_red">#e26d2e</color>
     <color name="deep_red">#dc3b1f</color>
     <color name="while_most_color">#e4e4e4</color>
     <color name="title_black">#222222</color>
-    <color name="grey_search">#FF999999</color>
 
     <color name="White">#FFFFFF</color>
     <color name="Black">#000000</color>

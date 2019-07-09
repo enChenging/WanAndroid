@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.classic.common.MultipleStatusView
 import com.release.wanandroid.constant.Constant
-import com.release.wanandroid.utils.Preference
+import com.release.wanandroid.utils.Sp
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -28,7 +28,7 @@ abstract class BaseFragment : Fragment() {
     /**
      * check login
      */
-    protected var isLogin: Boolean by Preference(Constant.LOGIN_KEY, false)
+    protected var isLogin: Boolean by Sp(Constant.LOGIN_KEY, false)
 
     protected var mLayoutStatusView: MultipleStatusView? = null
 

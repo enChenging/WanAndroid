@@ -31,7 +31,7 @@ import org.greenrobot.eventbus.ThreadMode
 abstract class BaseActivity : AppCompatActivity() {
 
 
-    protected var isLogin: Boolean by Preference(Constant.LOGIN_KEY, false)
+    protected var isLogin: Boolean by Sp(Constant.LOGIN_KEY, false)
 
     abstract fun initLayoutID(): Int
 
@@ -61,7 +61,7 @@ abstract class BaseActivity : AppCompatActivity() {
     /**
      * 缓存上一次的网络状态
      */
-    protected var hasNetwork: Boolean by Preference(Constant.HAS_NETWORK_KEY, true)
+    protected var hasNetwork: Boolean by Sp(Constant.HAS_NETWORK_KEY, true)
 
     /**
      * 是否需要显示 TipView

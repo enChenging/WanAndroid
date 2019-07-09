@@ -1,7 +1,7 @@
 
 package com.release.wanandroid.constant
 
-import com.release.wanandroid.utils.Preference
+import com.release.wanandroid.utils.Sp
 
 /**
  * @author Mr.release
@@ -48,11 +48,11 @@ object HttpConstant {
 
     fun saveCookie(url: String?, domain: String?, cookies: String) {
         url ?: return
-        var spUrl: String by Preference(url, cookies)
+        var spUrl: String by Sp(url, cookies)
         @Suppress("UNUSED_VALUE")
         spUrl = cookies
         domain ?: return
-        var spDomain: String by Preference(domain, cookies)
+        var spDomain: String by Sp(domain, cookies)
         @Suppress("UNUSED_VALUE")
         spDomain = cookies
     }

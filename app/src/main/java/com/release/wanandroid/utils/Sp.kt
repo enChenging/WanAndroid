@@ -12,7 +12,7 @@ import kotlin.reflect.KProperty
  * @create 2019/6/24
  * @Describe
  */
-class Preference<T>(val name: String, private val default: T) {
+class Sp<T>(val name: String, private val default: T) {
 
     companion object {
         private val file_name = "wan_android_file"

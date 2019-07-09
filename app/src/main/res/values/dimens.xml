@@ -38,6 +38,9 @@
     <dimen name="textSize_titleSmall">16sp</dimen>
     <dimen name="textSize_title">18sp</dimen>
 
+    <dimen name="text_notes">12sp</dimen>
+    <dimen name="text_content">15sp</dimen>
+
     <!-- dp -->
     <dimen name="dp_05">0.5dp</dimen>
     <dimen name="dp_1">1dp</dimen>
