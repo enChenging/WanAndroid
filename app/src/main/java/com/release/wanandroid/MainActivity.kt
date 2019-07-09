@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatDelegate
@@ -117,7 +118,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             }
         }
 
-        bottom_navigation.run {
+        bottom_navigation.apply {
             // 以前使用 BottomNavigationViewHelper.disableShiftMode(this) 方法来设置底部图标和字体都显示并去掉点击动画
             // 升级到 28.0.0 之后，官方重构了 BottomNavigationView ，目前可以使用 labelVisibilityMode = 1 来替代
             // BottomNavigationViewHelper.disableShiftMode(this)
@@ -167,23 +168,6 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
 
     }
 
-    private fun naviTag(position: Int) {
-        mIndex = position
-        vp_main.currentItem = position
-        toolbar.run {
-            tv_title.text = mTitles[position]
-
-            if (position == FRAGMENT_HOME) {
-                iv_left.visibility = View.VISIBLE
-                iv_right.visibility = View.VISIBLE
-            } else {
-                iv_left.visibility = View.INVISIBLE
-                iv_right.visibility = View.INVISIBLE
-            }
-        }
-
-    }
-
     private val mAdapter: ViewPagerAdapter by lazy {
         ViewPagerAdapter(fragments, supportFragmentManager)
     }
@@ -202,10 +186,9 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         }
     }
 
-
     override fun initThemeColor() {
         super.initThemeColor()
-        StatusBarUtil.setColorForDrawerLayout(this, drawer_layout, mThemeColor, 0)
+        initNavigationColor()
         refreshColor(ColorEvent(true))
     }
 
@@ -229,6 +212,19 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         val fragment = fragments[FRAGMENT_HOME]
         if (fragment is HomeFragment)
             fragment.lazyLoad()
+    }
+
+    private fun initNavigationColor() {
+
+        val states = Array(2) { IntArray(1) }
+        states[0][0] = -android.R.attr.state_checked
+        states[1][0] = android.R.attr.state_checked
+        val colors = IntArray(2)
+        colors[0] = ContextCompat.getColor(this@MainActivity, R.color.textColorPrimary)
+        colors[1] = mThemeColor
+        val csl = ColorStateList(states, colors)
+        bottom_navigation.itemTextColor = csl
+        bottom_navigation.itemIconTintList = csl
     }
 
     private fun initDrawerLayout() {
@@ -310,6 +306,22 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             }
         }
 
+    private fun naviTag(position: Int) {
+        mIndex = position
+        vp_main.currentItem = position
+
+        toolbar.run {
+            tv_title.text = mTitles[position]
+            if (position == FRAGMENT_HOME) {
+                iv_left.visibility = View.VISIBLE
+                iv_right.visibility = View.VISIBLE
+            } else {
+                iv_left.visibility = View.INVISIBLE
+                iv_right.visibility = View.INVISIBLE
+            }
+        }
+
+    }
 
     /**
      * NavigationView 监听

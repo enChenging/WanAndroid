@@ -33,11 +33,11 @@
                 android:layout_gravity="bottom"
                 android:background="@color/viewBackground"
                 app:elevation="@dimen/dp_16"
-                app:itemIconTint="@drawable/nav_item_color_state"
-                app:itemTextColor="@drawable/nav_item_color_state"
                 app:menu="@menu/bottom_navigation_main"
                 app:layout_behavior=".widget.behavior.BottomNavigationBehavior"
         />
+                <!--app:itemIconTint="@drawable/nav_item_color_state"-->
+                <!--app:itemTextColor="@drawable/nav_item_color_state"-->
 
         <android.support.design.widget.FloatingActionButton
                 android:id="@+id/floating_action_btn"
