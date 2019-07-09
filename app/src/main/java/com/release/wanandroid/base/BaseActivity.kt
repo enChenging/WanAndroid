@@ -35,7 +35,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     abstract fun initLayoutID(): Int
 
-    protected var mThemeColor: Int = SettingUtil.getColor()
+    open var mThemeColor: Int = SettingUtil.getColor()
 
     protected var mLayoutStatusView: MultipleStatusView? = null
 

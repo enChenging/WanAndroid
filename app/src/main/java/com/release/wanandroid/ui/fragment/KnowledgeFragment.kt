@@ -1,14 +1,15 @@
 package com.release.wanandroid.ui.fragment
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.release.wanandroid.App
 import com.release.wanandroid.R
+import com.release.wanandroid.base.BaseActivity
 import com.release.wanandroid.base.BaseMvpFragment
 import com.release.wanandroid.constant.Constant
 import com.release.wanandroid.ext.showSnackMsg
@@ -29,7 +30,8 @@ import kotlinx.android.synthetic.main.fragment_refresh_layout.*
  * @create 2019/7/1
  * @Describe
  */
-class KnowledgeFragment : BaseMvpFragment<KnowledgeContract.View, KnowledgeContract.Presenter>(), KnowledgeContract.View {
+class KnowledgeFragment : BaseMvpFragment<KnowledgeContract.View, KnowledgeContract.Presenter>(),
+    KnowledgeContract.View {
 
     companion object {
         fun getInstance(cid: Int): KnowledgeFragment {
@@ -40,6 +42,8 @@ class KnowledgeFragment : BaseMvpFragment<KnowledgeContract.View, KnowledgeContr
             return fragment
         }
     }
+
+    override fun initLayoutID(): Int = R.layout.fragment_refresh_layout
 
     override fun createPresenter(): KnowledgeContract.Presenter = KnowledgePresenter()
 
@@ -81,12 +85,60 @@ class KnowledgeFragment : BaseMvpFragment<KnowledgeContract.View, KnowledgeContr
      */
     private var isRefresh = true
 
+
+    override fun initView(view: View) {
+        super.initView(view)
+        mLayoutStatusView = multiple_status_view
+        cid = arguments?.getInt(Constant.CONTENT_CID_KEY) ?: 0
+
+
+        refresh_layout.run {
+            setOnRefreshListener {
+                isRefresh = true
+                knowledgeAdapter.setEnableLoadMore(false)
+                mPresenter?.requestKnowledgeList(0, cid)
+                finishRefresh(1000)
+            }
+
+            setOnLoadMoreListener {
+                isRefresh = false
+                val page = knowledgeAdapter.data.size / 20
+                mPresenter?.requestKnowledgeList(page, cid)
+                finishLoadMore(1000)
+            }
+        }
+
+
+        recyclerView.run {
+            layoutManager = linearLayoutManager
+            adapter = knowledgeAdapter
+            itemAnimator = DefaultItemAnimator()
+            recyclerViewItemDecoration?.let { addItemDecoration(it) }
+        }
+
+        knowledgeAdapter.run {
+            onItemClickListener = this@KnowledgeFragment.onItemClickListener
+            onItemChildClickListener = this@KnowledgeFragment.onItemChildClickListener
+            // setEmptyView(R.layout.fragment_empty_layout)
+        }
+    }
+
+    @SuppressLint("RestrictedApi")
+    override fun onResume() {
+        super.onResume()
+        refresh_layout.RefreshKernelImpl()
+            .refreshLayout.refreshHeader?.setPrimaryColors((activity as BaseActivity).mThemeColor)
+    }
+
+    override fun lazyLoad() {
+        mLayoutStatusView?.showLoading()
+        mPresenter?.requestKnowledgeList(0, cid)
+    }
+
     override fun showLoading() {
-        // swipeRefreshLayout.isRefreshing = isRefresh
     }
 
     override fun hideLoading() {
-        swipeRefreshLayout?.isRefreshing = false
         if (isRefresh) {
             knowledgeAdapter.run {
                 setEnableLoadMore(true)
@@ -113,35 +165,6 @@ class KnowledgeFragment : BaseMvpFragment<KnowledgeContract.View, KnowledgeContr
                 smoothScrollToPosition(0)
             }
         }
-    }
-
-    override fun initLayoutID():  Int = R.layout.fragment_refresh_layout
-
-    override fun initView(view: View) {
-        super.initView(view)
-        mLayoutStatusView = multiple_status_view
-        cid = arguments?.getInt(Constant.CONTENT_CID_KEY) ?: 0
-        swipeRefreshLayout.run {
-            setOnRefreshListener(onRefreshListener)
-        }
-        recyclerView.run {
-            layoutManager = linearLayoutManager
-            adapter = knowledgeAdapter
-            itemAnimator = DefaultItemAnimator()
-            recyclerViewItemDecoration?.let { addItemDecoration(it) }
-        }
-
-        knowledgeAdapter.run {
-            setOnLoadMoreListener(onRequestLoadMoreListener, recyclerView)
-            onItemClickListener = this@KnowledgeFragment.onItemClickListener
-            onItemChildClickListener = this@KnowledgeFragment.onItemChildClickListener
-            // setEmptyView(R.layout.fragment_empty_layout)
-        }
-    }
-
-    override fun lazyLoad() {
-        mLayoutStatusView?.showLoading()
-        mPresenter?.requestKnowledgeList(0, cid)
     }
 
     override fun showCancelCollectSuccess(success: Boolean) {
@@ -180,25 +203,6 @@ class KnowledgeFragment : BaseMvpFragment<KnowledgeContract.View, KnowledgeContr
     }
 
     /**
-     * RefreshListener
-     */
-    private val onRefreshListener = SwipeRefreshLayout.OnRefreshListener {
-        isRefresh = true
-        knowledgeAdapter.setEnableLoadMore(false)
-        mPresenter?.requestKnowledgeList(0, cid)
-    }
-
-    /**
-     * LoadMoreListener
-     */
-    private val onRequestLoadMoreListener = BaseQuickAdapter.RequestLoadMoreListener {
-        isRefresh = false
-        swipeRefreshLayout.isRefreshing = false
-        val page = knowledgeAdapter.data.size / 20
-        mPresenter?.requestKnowledgeList(page, cid)
-    }
-
-    /**
      * ItemClickListener
      */
     private val onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, position ->
@@ -217,33 +221,33 @@ class KnowledgeFragment : BaseMvpFragment<KnowledgeContract.View, KnowledgeContr
      * ItemChildClickListener
      */
     private val onItemChildClickListener =
-            BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
-                if (datas.size != 0) {
-                    val data = datas[position]
-                    when (view.id) {
-                        R.id.iv_like -> {
-                            if (isLogin) {
-                                if (!NetWorkUtil.isNetworkAvailable(App.context)) {
-                                    showSnackMsg(resources.getString(R.string.no_network))
-                                    return@OnItemChildClickListener
-                                }
-                                val collect = data.collect
-                                data.collect = !collect
-                                knowledgeAdapter.setData(position, data)
-                                if (collect) {
-                                    mPresenter?.cancelCollectArticle(data.id)
-                                } else {
-                                    mPresenter?.addCollectArticle(data.id)
-                                }
-                            } else {
-                                Intent(activity, LoginActivity::class.java).run {
-                                    startActivity(this)
-                                }
-                                showToast(resources.getString(R.string.login_tint))
+        BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
+            if (datas.size != 0) {
+                val data = datas[position]
+                when (view.id) {
+                    R.id.iv_like -> {
+                        if (isLogin) {
+                            if (!NetWorkUtil.isNetworkAvailable(App.context)) {
+                                showSnackMsg(resources.getString(R.string.no_network))
+                                return@OnItemChildClickListener
                             }
+                            val collect = data.collect
+                            data.collect = !collect
+                            knowledgeAdapter.setData(position, data)
+                            if (collect) {
+                                mPresenter?.cancelCollectArticle(data.id)
+                            } else {
+                                mPresenter?.addCollectArticle(data.id)
+                            }
+                        } else {
+                            Intent(activity, LoginActivity::class.java).run {
+                                startActivity(this)
+                            }
+                            showToast(resources.getString(R.string.login_tint))
                         }
                     }
                 }
             }
+        }
 
 }

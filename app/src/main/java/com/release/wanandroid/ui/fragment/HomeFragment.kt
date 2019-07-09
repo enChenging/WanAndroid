@@ -2,6 +2,7 @@ package com.release.wanandroid.ui.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -11,9 +12,12 @@ import cn.bingoogolapple.bgabanner.BGABanner
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.orhanobut.logger.Logger
 import com.release.wanandroid.App
+import com.release.wanandroid.MainActivity
 import com.release.wanandroid.R
+import com.release.wanandroid.base.BaseActivity
 import com.release.wanandroid.base.BaseMvpFragment
 import com.release.wanandroid.constant.Constant
+import com.release.wanandroid.event.ColorEvent
 import com.release.wanandroid.ext.showSnackMsg
 import com.release.wanandroid.ext.showToast
 import com.release.wanandroid.mvp.contract.HomeContract
@@ -28,8 +32,14 @@ import com.release.wanandroid.utils.ImageLoader
 import com.release.wanandroid.utils.NetWorkUtil
 import com.release.wanandroid.widget.SpaceItemDecoration
 import io.reactivex.Observable
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_home.multiple_status_view
+import kotlinx.android.synthetic.main.fragment_home.recyclerView
+import kotlinx.android.synthetic.main.fragment_navigation.*
 import kotlinx.android.synthetic.main.item_home_banner.view.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * @author Mr.release
@@ -98,8 +108,20 @@ class HomeFragment : BaseMvpFragment<HomeContract.View, HomeContract.Presenter>(
         super.initView(view)
         mLayoutStatusView = multiple_status_view
 
-        swipeRefreshLayout.run {
-            setOnRefreshListener(onRefreshListener)
+        refresh_layout.run {
+            setOnRefreshListener {
+                isRefresh = true
+                homeAdapter.setEnableLoadMore(false)
+                mPresenter?.requestHomeData()
+                finishRefresh(1000)
+            }
+
+            setOnLoadMoreListener {
+                isRefresh = false
+                val page = homeAdapter.data.size / 20
+                mPresenter?.requestArticles(page)
+                finishLoadMore(1000)
+            }
         }
 
         recyclerView.run {
@@ -116,12 +138,18 @@ class HomeFragment : BaseMvpFragment<HomeContract.View, HomeContract.Presenter>(
 
         homeAdapter.run {
             bindToRecyclerView(recyclerView)
-            setOnLoadMoreListener(onRequestLoadMoreListener, recyclerView)
             onItemClickListener = this@HomeFragment.onItemClickListener
             onItemChildClickListener = this@HomeFragment.onItemChildClickListener
             addHeaderView(bannerView)
         }
     }
+
+    @SuppressLint("RestrictedApi")
+    override fun onResume() {
+        super.onResume()
+        refresh_layout.RefreshKernelImpl().refreshLayout.refreshHeader?.setPrimaryColors((activity as BaseActivity).mThemeColor)
+    }
+
 
     override fun lazyLoad() {
         mLayoutStatusView?.showLoading()
@@ -215,7 +243,6 @@ class HomeFragment : BaseMvpFragment<HomeContract.View, HomeContract.Presenter>(
     }
 
     override fun hideLoading() {
-        swipeRefreshLayout?.isRefreshing = false
         if (isRefresh) {
             homeAdapter.run { setEnableLoadMore(true) }
         }
@@ -232,24 +259,6 @@ class HomeFragment : BaseMvpFragment<HomeContract.View, HomeContract.Presenter>(
         }
     }
 
-    /**
-     * RefreshListener
-     */
-    private val onRefreshListener = SwipeRefreshLayout.OnRefreshListener {
-        isRefresh = true
-        homeAdapter.setEnableLoadMore(false)
-        mPresenter?.requestHomeData()
-    }
-
-    /**
-     * LoadMoreListener
-     */
-    private val onRequestLoadMoreListener = BaseQuickAdapter.RequestLoadMoreListener {
-        isRefresh = false
-        swipeRefreshLayout.isRefreshing = false
-        val page = homeAdapter.data.size / 20
-        mPresenter?.requestArticles(page)
-    }
 
     /**
      * ItemClickListener

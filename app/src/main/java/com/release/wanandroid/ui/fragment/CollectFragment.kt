@@ -23,6 +23,9 @@ import com.release.wanandroid.ui.adapter.CollectAdapter
 import com.release.wanandroid.widget.SpaceItemDecoration
 import kotlinx.android.synthetic.main.activity_knowledge.*
 import kotlinx.android.synthetic.main.fragment_refresh_layout.*
+import kotlinx.android.synthetic.main.fragment_refresh_layout.multiple_status_view
+import kotlinx.android.synthetic.main.fragment_refresh_layout.recyclerView
+import kotlinx.android.synthetic.main.fragment_todo.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode

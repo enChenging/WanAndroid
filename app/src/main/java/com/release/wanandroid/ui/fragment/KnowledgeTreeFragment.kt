@@ -1,12 +1,13 @@
 package com.release.wanandroid.ui.fragment
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.release.wanandroid.R
+import com.release.wanandroid.base.BaseActivity
 import com.release.wanandroid.base.BaseMvpFragment
 import com.release.wanandroid.constant.Constant
 import com.release.wanandroid.mvp.contract.KnowledgeTreeContract
@@ -16,6 +17,9 @@ import com.release.wanandroid.ui.activity.KnowledgeActivity
 import com.release.wanandroid.ui.adapter.KnowledgeTreeAdapter
 import com.release.wanandroid.widget.RecyclerViewItemDecoration
 import kotlinx.android.synthetic.main.fragment_refresh_layout.*
+import kotlinx.android.synthetic.main.fragment_refresh_layout.multiple_status_view
+import kotlinx.android.synthetic.main.fragment_refresh_layout.recyclerView
+import kotlinx.android.synthetic.main.fragment_todo.*
 
 /**
  * @author Mr.release
@@ -37,30 +41,6 @@ class KnowledgeTreeFragment : BaseMvpFragment<KnowledgeTreeContract.View, Knowle
     private val datas = mutableListOf<KnowledgeTreeBody>()
 
 
-    override fun scrollToTop() {
-        recyclerView.run {
-            if (linearLayoutManager.findFirstVisibleItemPosition()>20){
-                scrollToPosition(0)
-            }else{
-                smoothScrollToPosition(0)
-            }
-        }
-    }
-
-    override fun setKnowledgeTree(lists: List<KnowledgeTreeBody>) {
-        lists.let {
-            knowledgeTreeAdapter.run {
-                replaceData(lists)
-            }
-        }
-
-        if(knowledgeTreeAdapter.data.isEmpty()){
-            mLayoutStatusView?.showEmpty()
-        }else{
-            mLayoutStatusView?.showContent()
-        }
-    }
-
     private val knowledgeTreeAdapter: KnowledgeTreeAdapter by lazy {
         KnowledgeTreeAdapter(activity, datas)
     }
@@ -78,8 +58,13 @@ class KnowledgeTreeFragment : BaseMvpFragment<KnowledgeTreeContract.View, Knowle
     override fun initView(view: View) {
         super.initView(view)
         mLayoutStatusView = multiple_status_view
-        swipeRefreshLayout.run {
-            setOnRefreshListener(onRefreshListener)
+
+
+        refresh_layout.run {
+            setOnRefreshListener {
+                mPresenter?.requestKnowledgeTree()
+                finishRefresh(1000)
+            }
         }
 
         recyclerView.run {
@@ -98,10 +83,41 @@ class KnowledgeTreeFragment : BaseMvpFragment<KnowledgeTreeContract.View, Knowle
         }
     }
 
+    @SuppressLint("RestrictedApi")
+    override fun onResume() {
+        super.onResume()
+        refresh_layout.RefreshKernelImpl().refreshLayout.refreshHeader?.setPrimaryColors((activity as BaseActivity).mThemeColor)
+    }
+
+
     override fun lazyLoad() {
 
         mLayoutStatusView?.showLoading()
         mPresenter?.requestKnowledgeTree()
+    }
+
+    override fun scrollToTop() {
+        recyclerView.run {
+            if (linearLayoutManager.findFirstVisibleItemPosition() > 20) {
+                scrollToPosition(0)
+            } else {
+                smoothScrollToPosition(0)
+            }
+        }
+    }
+
+    override fun setKnowledgeTree(lists: List<KnowledgeTreeBody>) {
+        lists.let {
+            knowledgeTreeAdapter.run {
+                replaceData(lists)
+            }
+        }
+
+        if (knowledgeTreeAdapter.data.isEmpty()) {
+            mLayoutStatusView?.showEmpty()
+        } else {
+            mLayoutStatusView?.showContent()
+        }
     }
 
     override fun showLoading() {
@@ -109,7 +125,6 @@ class KnowledgeTreeFragment : BaseMvpFragment<KnowledgeTreeContract.View, Knowle
     }
 
     override fun hideLoading() {
-        swipeRefreshLayout.isRefreshing = false
         knowledgeTreeAdapter.run {
             loadMoreComplete()
         }
@@ -123,10 +138,6 @@ class KnowledgeTreeFragment : BaseMvpFragment<KnowledgeTreeContract.View, Knowle
         }
     }
 
-
-    private val onRefreshListener = SwipeRefreshLayout.OnRefreshListener {
-        mPresenter?.requestKnowledgeTree()
-    }
 
     /**
      * ItemClickListener

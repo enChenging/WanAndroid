@@ -3,6 +3,7 @@ package com.release.wanandroid.ui.activity
 import android.content.res.ColorStateList
 import android.os.Build
 import android.support.design.widget.BottomNavigationView
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
@@ -164,6 +165,7 @@ class TodoActivity : BaseSwipeBackActivity() {
 
     override fun initThemeColor() {
         super.initThemeColor()
+        initNavigationColor()
         refreshColor(ColorEvent(true))
     }
 
@@ -174,6 +176,18 @@ class TodoActivity : BaseSwipeBackActivity() {
         }
     }
 
+    private fun initNavigationColor() {
+
+        val states = Array(2) { IntArray(1) }
+        states[0][0] = -android.R.attr.state_checked
+        states[1][0] = android.R.attr.state_checked
+        val colors = IntArray(2)
+        colors[0] = ContextCompat.getColor(this@TodoActivity, R.color.textColorPrimary)
+        colors[1] = mThemeColor
+        val csl = ColorStateList(states, colors)
+        bottom_navigation.itemTextColor = csl
+        bottom_navigation.itemIconTintList = csl
+    }
     /**
      * NavigationItemSelect监听
      */
