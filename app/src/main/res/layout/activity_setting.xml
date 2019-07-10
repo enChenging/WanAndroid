@@ -34,7 +34,7 @@
                         android:singleLine="true"
                         android:text="@string/switch_show_top_title"
                         android:textColor="@color/text_black"
-                        android:textSize="@dimen/text_content"/>
+                        android:textSize="@dimen/textSize_content"/>
 
                 <TextView
                         android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="80dp"
                         android:textColor="@color/text_gray_light"
-                        android:textSize="@dimen/text_notes"/>
+                        android:textSize="@dimen/textSize_small"/>
 
                 <android.support.v7.widget.SwitchCompat
                         android:id="@+id/sc_top_summary"
@@ -75,7 +75,7 @@
                         android:singleLine="true"
                         android:text="@string/nav_bar_coloration"
                         android:textColor="@color/text_black"
-                        android:textSize="@dimen/text_content"/>
+                        android:textSize="@dimen/textSize_content"/>
 
                 <TextView
                         android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="80dp"
                         android:textColor="@color/text_gray_light"
-                        android:textSize="@dimen/text_notes"/>
+                        android:textSize="@dimen/textSize_small"/>
 
                 <android.support.v7.widget.SwitchCompat
                         android:id="@+id/sc_bar_coloration_summary"
@@ -116,7 +116,7 @@
                         android:singleLine="true"
                         android:text="@string/auto_night_mode"
                         android:textColor="@color/text_black"
-                        android:textSize="@dimen/text_content"/>
+                        android:textSize="@dimen/textSize_content"/>
 
                 <TextView
                         android:layout_width="wrap_content"
@@ -128,7 +128,7 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="80dp"
                         android:textColor="@color/text_gray_light"
-                        android:textSize="@dimen/text_notes"/>
+                        android:textSize="@dimen/textSize_small"/>
 
                 <android.support.v7.widget.SwitchCompat
                         android:id="@+id/sc_tv_auto_night"
@@ -172,7 +172,7 @@
                         android:singleLine="true"
                         android:text="@string/auto_night_start"
                         android:textColor="@color/selector_auto_night_title"
-                        android:textSize="@dimen/text_content"/>
+                        android:textSize="@dimen/textSize_content"/>
 
                 <TextView
                         android:id="@+id/tv_night_time"
@@ -184,7 +184,7 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="80dp"
                         android:textColor="@color/selector_auto_night_text"
-                        android:textSize="@dimen/text_notes"/>
+                        android:textSize="@dimen/textSize_small"/>
 
             </RelativeLayout>
 
@@ -205,7 +205,7 @@
                         android:singleLine="true"
                         android:text="@string/auto_day_start"
                         android:textColor="@color/selector_auto_night_title"
-                        android:textSize="@dimen/text_content"/>
+                        android:textSize="@dimen/textSize_content"/>
 
                 <TextView
                         android:id="@+id/tv_day_time"
@@ -217,7 +217,7 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="80dp"
                         android:textColor="@color/selector_auto_night_text"
-                        android:textSize="@dimen/text_notes"/>
+                        android:textSize="@dimen/textSize_small"/>
 
             </RelativeLayout>
 
@@ -237,7 +237,7 @@
                         android:singleLine="true"
                         android:text="@string/choose_theme_color"
                         android:textColor="@color/text_black"
-                        android:textSize="@dimen/text_content"/>
+                        android:textSize="@dimen/textSize_content"/>
 
                 <TextView
                         android:layout_width="wrap_content"
@@ -249,7 +249,7 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="80dp"
                         android:textColor="@color/text_gray_light"
-                        android:textSize="@dimen/text_notes"/>
+                        android:textSize="@dimen/textSize_small"/>
 
 
                 <com.afollestad.materialdialogs.color.CircleView
@@ -281,7 +281,7 @@
                         android:singleLine="true"
                         android:text="清除缓存"
                         android:textColor="@color/text_black"
-                        android:textSize="@dimen/text_content"/>
+                        android:textSize="@dimen/textSize_content"/>
 
                 <TextView
                         android:id="@+id/tv_cache"
@@ -292,7 +292,7 @@
                         android:text=""
                         tools:text="100MB"
                         android:textColor="@color/text_gray_light"
-                        android:textSize="@dimen/text_notes"/>
+                        android:textSize="@dimen/textSize_small"/>
 
                 <ImageView
                         android:layout_width="13dp"
@@ -321,7 +321,7 @@
                         android:singleLine="true"
                         android:text="版本更新"
                         android:textColor="@color/text_black"
-                        android:textSize="@dimen/text_content"/>
+                        android:textSize="@dimen/textSize_content"/>
 
                 <TextView
                         android:id="@+id/tv_has_update"
@@ -332,7 +332,7 @@
                         android:text=""
                         tools:text="已是最新版本"
                         android:textColor="@color/text_gray_light"
-                        android:textSize="@dimen/text_notes"/>
+                        android:textSize="@dimen/textSize_small"/>
 
                 <ImageView
                         android:layout_width="13dp"
