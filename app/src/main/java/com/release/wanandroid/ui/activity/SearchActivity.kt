@@ -74,6 +74,9 @@ class SearchActivity : BaseMvpSwipeBackActivity<SearchContract.View, SearchContr
 
     override fun initView() {
         super.initView()
+        tv_hot_search.setTextColor(mThemeColor)
+        tv_search_history.setTextColor(mThemeColor)
+
         toolbar.run {
             setSupportActionBar(this)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -134,8 +137,10 @@ class SearchActivity : BaseMvpSwipeBackActivity<SearchContract.View, SearchContr
         this.mHotSearchDatas.addAll(hotSearchDatas)
         hot_search_flow_layout.adapter = object : TagAdapter<HotSearchBean>(hotSearchDatas) {
             override fun getView(parent: FlowLayout?, position: Int, hotSearchBean: HotSearchBean?): View {
-                val tv: TextView = LayoutInflater.from(parent?.context).inflate(R.layout.flow_layout_tv,
-                        hot_search_flow_layout, false) as TextView
+                val tv: TextView = LayoutInflater.from(parent?.context).inflate(
+                    R.layout.flow_layout_tv,
+                    hot_search_flow_layout, false
+                ) as TextView
                 val padding: Int = DisplayManager.dip2px(10F)!!
                 tv.setPadding(padding, padding, padding, padding)
                 tv.text = hotSearchBean?.name
@@ -197,16 +202,16 @@ class SearchActivity : BaseMvpSwipeBackActivity<SearchContract.View, SearchContr
      * ItemChildClickListener
      */
     private val onItemChildClickListener =
-            BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
-                if (searchHistoryAdapter.data.size != 0) {
-                    val item = searchHistoryAdapter.data[position]
-                    when (view.id) {
-                        R.id.iv_clear -> {
-                            mPresenter?.deleteById(item.id)
-                            searchHistoryAdapter.remove(position)
-                        }
+        BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
+            if (searchHistoryAdapter.data.size != 0) {
+                val item = searchHistoryAdapter.data[position]
+                when (view.id) {
+                    R.id.iv_clear -> {
+                        mPresenter?.deleteById(item.id)
+                        searchHistoryAdapter.remove(position)
                     }
                 }
             }
+        }
 
 }

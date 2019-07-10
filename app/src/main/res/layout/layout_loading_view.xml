@@ -9,11 +9,11 @@
 
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/spin_kit"
-        style="@style/SpinKitView.ChasingDots"
+        style="@style/SpinKitView.Circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="@dimen/dp_16"
-        app:SpinKit_Color="@color/colorAccent" />
+        app:SpinKit_Color="@color/colorPrimary" />
 
 </LinearLayout>

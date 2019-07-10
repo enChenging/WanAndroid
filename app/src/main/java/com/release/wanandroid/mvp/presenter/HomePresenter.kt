@@ -1,5 +1,6 @@
 package com.release.wanandroid.mvp.presenter
 
+import com.orhanobut.logger.Logger
 import com.release.wanandroid.ext.ss
 import com.release.wanandroid.mvp.contract.HomeContract
 import com.release.wanandroid.mvp.model.HomeModel
@@ -35,7 +36,7 @@ class HomePresenter : CommonPresenter<HomeContract.Model, HomeContract.View>(), 
 
         requestBanner()
 
-        val observable = if (SettingUtil.getIsShowTopArticle()) {
+        val observable = if (!SettingUtil.getIsShowTopArticle()) {
             mModel?.requestArticles(0)
         } else {
             Observable.zip(mModel?.requestTopArticles(), mModel?.requestArticles(0),

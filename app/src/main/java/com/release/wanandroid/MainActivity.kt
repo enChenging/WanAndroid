@@ -31,8 +31,8 @@ import com.release.wanandroid.ui.adapter.ViewPagerAdapter
 import com.release.wanandroid.ui.fragment.*
 import com.release.wanandroid.ui.login.LoginActivity
 import com.release.wanandroid.utils.DialogUtil
-import com.release.wanandroid.utils.Sp
 import com.release.wanandroid.utils.SettingUtil
+import com.release.wanandroid.utils.Sp
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.greenrobot.eventbus.EventBus
@@ -229,7 +229,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         states[0][0] = -android.R.attr.state_checked
         states[1][0] = android.R.attr.state_checked
         val colors = IntArray(2)
-        colors[0] = ContextCompat.getColor(this@MainActivity, R.color.textColorPrimary)
+        colors[0] = ContextCompat.getColor(this@MainActivity, R.color.Black)
         colors[1] = mThemeColor
         val csl = ColorStateList(states, colors)
         bottom_navigation.itemTextColor = csl

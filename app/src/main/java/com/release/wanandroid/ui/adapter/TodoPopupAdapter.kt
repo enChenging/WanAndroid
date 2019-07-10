@@ -19,7 +19,7 @@ class TodoPopupAdapter : BaseQuickAdapter<TodoTypeBean, BaseViewHolder>(R.layout
         val tv_popup = helper.getView<TextView>(R.id.tv_popup)
         tv_popup.text = item.name
         if (item.isSelected) {
-            tv_popup.setTextColor(mContext.resources.getColor(R.color.colorAccent))
+            tv_popup.setTextColor(mContext.resources.getColor(R.color.colorPrimary))
         } else {
             tv_popup.setTextColor(mContext.resources.getColor(R.color.common_color))
         }

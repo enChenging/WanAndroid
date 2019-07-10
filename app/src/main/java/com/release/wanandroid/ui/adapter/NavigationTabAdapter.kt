@@ -31,7 +31,7 @@ class NavigationTabAdapter(context: Context?, list: List<NavigationBean>) : TabA
     override fun getTitle(position: Int): ITabView.TabTitle {
         return ITabView.TabTitle.Builder()
                 .setContent(list[position].name)
-                .setTextColor(ContextCompat.getColor(context, R.color.colorAccent),
+                .setTextColor(ContextCompat.getColor(context, R.color.colorPrimary),
                         ContextCompat.getColor(context, R.color.Grey500))
                 .build()
     }

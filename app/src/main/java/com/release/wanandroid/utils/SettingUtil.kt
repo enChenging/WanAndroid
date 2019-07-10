@@ -13,17 +13,14 @@ object SettingUtil {
     private val setting = PreferenceManager.getDefaultSharedPreferences(App.context)
 
     /**
-     * 获取是否开启无图模式
-     */
-    fun getIsNoPhotoMode(): Boolean {
-        return setting.getBoolean("switch_noPhotoMode", false) //&& NetWorkUtil.isMobile(App.context)
-    }
-
-    /**
      * 获取是否开启显示首页置顶文章，true: 不显示  false: 显示
      */
     fun getIsShowTopArticle(): Boolean {
         return setting.getBoolean("switch_show_top", false)
+    }
+
+    fun setIsShowTopArticle(isShow : Boolean){
+        setting.edit().putBoolean("switch_show_top", isShow).apply()
     }
 
     /**
@@ -51,6 +48,10 @@ object SettingUtil {
         return setting.getBoolean("nav_bar", false)
     }
 
+    fun setNavBar(isNavColor :Boolean) {
+        setting.edit().putBoolean("nav_bar", isNavColor).apply()
+    }
+
     /**
      * 设置夜间模式
      */
@@ -70,6 +71,10 @@ object SettingUtil {
      */
     fun getIsAutoNightMode(): Boolean {
         return setting.getBoolean("auto_nightMode", false)
+    }
+
+    fun setIsAutoNightMode(isAuto : Boolean){
+        setting.edit().putBoolean("auto_nightMode", isAuto).apply()
     }
 
     fun getNightStartHour(): String {

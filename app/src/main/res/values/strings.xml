@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WanAndroid</string>
+    <string name="app_name">玩安卓</string>
 
     <string name="home">首页</string>
     <string name="knowledge_system">知识体系</string>
@@ -94,7 +94,7 @@
     <string name="done">完成</string>
     <string name="custom">自定义</string>
     <string name="nav_bar_coloration">导航栏着色</string>
-    <string name="nav_bar_coloration_summary">导航栏颜色跟随主题颜色</string>
+    <string name="nav_bar_coloration_summary">底部带返回键手机的导航栏颜色跟随主题颜色</string>
     <string name="choose_icon">更换图标</string>
     <string name="choose_icon_summary">重启App生效(可以将App从最近任务列表删除来重启)</string>
     <string name="slidable_title">滑动返回</string>
