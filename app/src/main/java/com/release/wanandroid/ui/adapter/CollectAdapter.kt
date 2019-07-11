@@ -15,6 +15,7 @@ import com.release.wanandroid.utils.ImageLoader
  * @create 2019/7/1
  * @Describe
  */
+@Suppress("DEPRECATION")
 class CollectAdapter(private val context: Context?, datas: MutableList<CollectionArticle>)
     : BaseQuickAdapter<CollectionArticle, BaseViewHolder>(R.layout.item_collect_list, datas) {
     override fun convert(helper: BaseViewHolder?, item: CollectionArticle?) {

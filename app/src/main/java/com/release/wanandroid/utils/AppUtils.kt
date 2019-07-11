@@ -11,6 +11,7 @@ import java.security.MessageDigest
  * @create 2019/7/1
  * @Describe
  */
+@Suppress("DEPRECATION")
 class AppUtils private constructor() {
     init {
         throw Error("Do not need instantiate!")

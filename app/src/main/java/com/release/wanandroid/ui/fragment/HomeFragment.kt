@@ -88,7 +88,7 @@ class HomeFragment : BaseMvpFragment<HomeContract.View, HomeContract.Presenter>(
      * Banner Adapter
      */
     private val bannerAdapter: BGABanner.Adapter<ImageView, String> by lazy {
-        BGABanner.Adapter<ImageView, String> { bgaBanner, imageView, feedImageUrl, position ->
+        BGABanner.Adapter<ImageView, String> { _, imageView, feedImageUrl, _ ->
             ImageLoader.load(activity, feedImageUrl, imageView)
         }
     }
@@ -216,7 +216,7 @@ class HomeFragment : BaseMvpFragment<HomeContract.View, HomeContract.Presenter>(
     /**
      * BannerClickListener
      */
-    private val bannerDelegate = BGABanner.Delegate<ImageView, String> { banner, imageView, model, position ->
+    private val bannerDelegate = BGABanner.Delegate<ImageView, String> { _, _, _, position ->
         if (bannerDatas.size > 0) {
             val data = bannerDatas[position]
             Intent(activity, WebActivity::class.java).run {

@@ -29,7 +29,7 @@ object ImageLoader {
             val options = RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
                 .placeholder(R.drawable.bg_placeholder)
-            Glide.with(context!!)
+            Glide.with(context)
                 .load(url)
                 .transition(DrawableTransitionOptions().crossFade())
                 .apply(options)

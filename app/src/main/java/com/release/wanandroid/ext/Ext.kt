@@ -25,7 +25,7 @@ import java.util.*
  */
 
 fun Fragment.showToast(content: String) {
-    CustomToast(this?.activity, content).show()
+    CustomToast(this.activity, content).show()
 }
 
 fun Context.showToast(content: String) {

@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap
  * @create 2019/7/1
  * @Describe
  */
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PersistentCookieStore {
 
     private val LOG_TAG: String = "PersistentCookieStore"

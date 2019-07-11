@@ -1,3 +1,5 @@
+@file:Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+
 package com.release.wanandroid.utils
 
 import android.os.Build
@@ -82,16 +84,16 @@ object RomUtil {
         val line: String
         var input: BufferedReader? = null
         try {
-            val p = Runtime.getRuntime().exec("getprop " + propName)
+            val p = Runtime.getRuntime().exec("getprop $propName")
             input = BufferedReader(InputStreamReader(p.inputStream), 1024)
-            line = input!!.readLine()
-            input!!.close()
+            line = input.readLine()
+            input.close()
         } catch (ex: IOException) {
             return null
         } finally {
             if (input != null) {
                 try {
-                    input!!.close()
+                    input.close()
                 } catch (e: IOException) {
                 }
 

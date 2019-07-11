@@ -1,7 +1,6 @@
 package com.release.wanandroid.ui.adapter
 
 import android.app.ActivityOptions
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +23,8 @@ import com.zhy.view.flowlayout.TagFlowLayout
  * @create 2019/7/1
  * @Describe
  */
-class NavigationAdapter(context: Context?, datas: MutableList<NavigationBean>)
+@Suppress("NAME_SHADOWING")
+class NavigationAdapter(datas: MutableList<NavigationBean>)
     : BaseQuickAdapter<NavigationBean, BaseViewHolder>(R.layout.item_navigation_list, datas) {
 
     override fun convert(helper: BaseViewHolder?, item: NavigationBean?) {
@@ -42,7 +42,7 @@ class NavigationAdapter(context: Context?, datas: MutableList<NavigationBean>)
 
                     article ?: return null
 
-                    val padding: Int = DisplayManager.dip2px(10F)!!
+                    val padding: Int = DisplayManager.dip2px(10F)
                     tv.setPadding(padding, padding, padding, padding)
                     tv.text = article.title
                     tv.setTextColor(CommonUtil.randomColor())

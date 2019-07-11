@@ -14,6 +14,7 @@ import org.greenrobot.eventbus.EventBus
  * @create 2019/7/1
  * @Describe
  */
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class CommonActivity : BaseSwipeBackActivity() {
 
     override fun initLayoutID(): Int = R.layout.activity_common

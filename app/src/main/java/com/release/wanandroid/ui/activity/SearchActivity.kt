@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.toolbar_search.*
  * @create 2019/7/1
  * @Describe
  */
+@Suppress("DEPRECATION")
 class SearchActivity : BaseMvpSwipeBackActivity<SearchContract.View, SearchContract.Presenter>(), SearchContract.View {
 
     override fun createPresenter(): SearchContract.Presenter = SearchPresenter()
@@ -83,7 +84,7 @@ class SearchActivity : BaseMvpSwipeBackActivity<SearchContract.View, SearchContr
         }
 
         hot_search_flow_layout.run {
-            setOnTagClickListener { view, position, parent ->
+            setOnTagClickListener { _, position, _ ->
                 if (mHotSearchDatas.size > 0) {
                     val hotSearchBean = mHotSearchDatas[position]
                     goToSearchList(hotSearchBean.name)

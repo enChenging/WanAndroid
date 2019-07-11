@@ -17,6 +17,7 @@ import android.view.View
  * @create 2019/6/24
  * @Describe
  */
+@Suppress("DEPRECATION")
 class SpaceItemDecoration(context: Context) : RecyclerView.ItemDecoration() {
 
     private var mDivider: Drawable? = null

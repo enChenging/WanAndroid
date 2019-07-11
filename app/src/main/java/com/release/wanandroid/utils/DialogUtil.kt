@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.release.wanandroid.utils
 
 import android.app.ProgressDialog

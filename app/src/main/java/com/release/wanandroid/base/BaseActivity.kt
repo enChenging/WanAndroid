@@ -224,7 +224,7 @@ abstract class BaseActivity : AppCompatActivity() {
         if (enableNetworkTip()) {
             if (isConnected) {
                 doReConnected()
-                if (mTipView != null && mTipView.parent != null) {
+                if (mTipView.parent != null) {
                     mWindowManager.removeView(mTipView)
                 }
             } else {

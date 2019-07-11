@@ -30,6 +30,7 @@ import org.greenrobot.eventbus.ThreadMode
  * @create 2019/7/1
  * @Describe
  */
+@Suppress("NAME_SHADOWING")
 class TodoActivity : BaseSwipeBackActivity() {
 
     private var mType = 0
@@ -94,7 +95,7 @@ class TodoActivity : BaseSwipeBackActivity() {
         val recyclerView = layoutInflater.inflate(R.layout.layout_popup_todo, null) as RecyclerView
         val adapter = TodoPopupAdapter()
         adapter.setNewData(dataList)
-        adapter.setOnItemClickListener { adapter, view, position ->
+        adapter.setOnItemClickListener { adapter, _, position ->
             mSwitchPopupWindow?.dismiss()
             val itemData = adapter.data[position] as TodoTypeBean
             mType = itemData.type
@@ -124,7 +125,7 @@ class TodoActivity : BaseSwipeBackActivity() {
             setOnDismissListener {
                 dismiss()
             }
-            setTouchInterceptor { v, event ->
+            setTouchInterceptor { _, event ->
                 if (event.action == MotionEvent.ACTION_OUTSIDE) {
                     dismiss()
                     true

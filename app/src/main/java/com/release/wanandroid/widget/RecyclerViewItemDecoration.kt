@@ -14,6 +14,7 @@ import android.view.View
  * @create 2019/7/1
  * @Describe
  */
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class RecyclerViewItemDecoration : RecyclerView.ItemDecoration {
 
     private var context: Context

@@ -51,7 +51,7 @@ class NavigationFragment : BaseMvpFragment<NavigationContract.View, NavigationCo
      * NavigationAdapter
      */
     private val navigationAdapter: NavigationAdapter by lazy {
-        NavigationAdapter(activity, datas)
+        NavigationAdapter(datas)
     }
 
     override fun initLayoutID(): Int = R.layout.fragment_navigation

@@ -1,3 +1,4 @@
+@file:Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE")
 
 package com.release.wanandroid.constant
 

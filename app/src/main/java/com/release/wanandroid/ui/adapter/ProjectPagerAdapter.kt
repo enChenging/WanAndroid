@@ -13,6 +13,7 @@ import com.release.wanandroid.ui.fragment.ProjectListFragment
  * @create 2019/7/1
  * @Describe
  */
+@Suppress("DEPRECATION")
 class ProjectPagerAdapter(private val list: MutableList<ProjectTreeBean>, fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
 
     private val fragments = mutableListOf<Fragment>()

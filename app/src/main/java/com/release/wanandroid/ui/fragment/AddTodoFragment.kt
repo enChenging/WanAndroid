@@ -23,6 +23,7 @@ import java.util.*
  * @create 2019/7/1
  * @Describe
  */
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class AddTodoFragment : BaseMvpFragment<AddTodoContract.View, AddTodoContract.Presenter>(), AddTodoContract.View {
 
     companion object {
@@ -95,7 +96,7 @@ class AddTodoFragment : BaseMvpFragment<AddTodoContract.View, AddTodoContract.Pr
                 tv_date.text = formatCurrentDate()
             }
             Constant.Type.EDIT_TODO_TYPE_KEY -> {
-                mTodoBean = arguments?.getSerializable(Constant.TODO_BEAN) as TodoBean ?: null
+                mTodoBean = arguments?.getSerializable(Constant.TODO_BEAN) as TodoBean
                 et_title.setText(mTodoBean?.title)
                 et_content.setText(mTodoBean?.content)
                 tv_date.text = mTodoBean?.dateStr
@@ -109,7 +110,7 @@ class AddTodoFragment : BaseMvpFragment<AddTodoContract.View, AddTodoContract.Pr
                 }
             }
             Constant.Type.SEE_TODO_TYPE_KEY -> {
-                mTodoBean = arguments?.getSerializable(Constant.TODO_BEAN) as TodoBean ?: null
+                mTodoBean = arguments?.getSerializable(Constant.TODO_BEAN) as TodoBean
                 et_title.setText(mTodoBean?.title)
                 et_content.setText(mTodoBean?.content)
                 tv_date.text = mTodoBean?.dateStr
@@ -142,7 +143,7 @@ class AddTodoFragment : BaseMvpFragment<AddTodoContract.View, AddTodoContract.Pr
                 }
             }
             val dpd = android.app.DatePickerDialog(activity,
-                    DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                    DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                         mCurrentDate = "$year-${month + 1}-$dayOfMonth"
                         tv_date.text = mCurrentDate
                     },
@@ -164,7 +165,7 @@ class AddTodoFragment : BaseMvpFragment<AddTodoContract.View, AddTodoContract.Pr
             }
         }
 
-        rg_priority.setOnCheckedChangeListener { group, checkedId ->
+        rg_priority.setOnCheckedChangeListener { _, checkedId ->
             if (checkedId == R.id.rb0) {
                 mPriority = 0
                 rb0.isChecked = true

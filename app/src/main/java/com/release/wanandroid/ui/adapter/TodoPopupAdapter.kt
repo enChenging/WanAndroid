@@ -1,5 +1,6 @@
 package com.release.wanandroid.ui.adapter
 
+import android.support.v4.content.ContextCompat
 import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -19,9 +20,10 @@ class TodoPopupAdapter : BaseQuickAdapter<TodoTypeBean, BaseViewHolder>(R.layout
         val tv_popup = helper.getView<TextView>(R.id.tv_popup)
         tv_popup.text = item.name
         if (item.isSelected) {
-            tv_popup.setTextColor(mContext.resources.getColor(R.color.colorPrimary))
+
+            tv_popup.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
         } else {
-            tv_popup.setTextColor(mContext.resources.getColor(R.color.common_color))
+            tv_popup.setTextColor(ContextCompat.getColor(mContext, R.color.common_color))
         }
     }
 }

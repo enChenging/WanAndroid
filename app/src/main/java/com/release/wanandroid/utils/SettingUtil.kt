@@ -1,7 +1,10 @@
+@file:Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+
 package com.release.wanandroid.utils
 
 import android.graphics.Color
 import android.preference.PreferenceManager
+import android.support.v4.content.ContextCompat
 import com.release.wanandroid.App
 import com.release.wanandroid.R
 /**
@@ -27,7 +30,8 @@ object SettingUtil {
      * 获取主题颜色
      */
     fun getColor(): Int {
-        val defaultColor = App.context.resources.getColor(R.color.colorPrimary)
+
+        val defaultColor =  ContextCompat.getColor(App.context,R.color.colorPrimary)
         val color = setting.getInt("color", defaultColor)
         return if (color != 0 && Color.alpha(color) != 255) {
             defaultColor

@@ -263,7 +263,7 @@ class TodoFragment : BaseMvpFragment<TodoContract.View, TodoContract.Presenter>(
      */
     private val onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, position ->
         if (datas.size != 0) {
-            val data = datas[position]
+            datas[position]
         }
     }
 

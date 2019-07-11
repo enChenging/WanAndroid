@@ -15,6 +15,7 @@ import java.net.URL
  * @create 2019/6/24
  * @Describe
  */
+@Suppress("DEPRECATION")
 class NetWorkUtil {
     companion object {
 

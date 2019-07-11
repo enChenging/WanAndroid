@@ -12,6 +12,7 @@ import com.release.wanandroid.mvp.model.bean.KnowledgeTreeBody
  * @create 2019/7/1
  * @Describe
  */
+@Suppress("DEPRECATION")
 class KnowledgeTreeAdapter(private val context: Context?, datas: MutableList<KnowledgeTreeBody>) : BaseQuickAdapter<KnowledgeTreeBody, BaseViewHolder>(
     R.layout.item_knowledge_tree_list, datas) {
 

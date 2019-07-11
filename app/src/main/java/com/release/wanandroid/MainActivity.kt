@@ -87,9 +87,8 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (savedInstanceState != null) {
-            mIndex = savedInstanceState?.getInt(BOTTOM_INDEX)
-        }
+        if (savedInstanceState != null)
+            mIndex = savedInstanceState.getInt(BOTTOM_INDEX)
         super.onCreate(savedInstanceState)
     }
 
@@ -239,7 +238,8 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
     private fun initDrawerLayout() {
 
         drawer_layout.run {
-            setScrimColor(resources.getColor(R.color.Black_alpha_32))
+
+            setScrimColor(ContextCompat.getColor(this@MainActivity,R.color.Black_alpha_32))
 
             addDrawerListener(object : DrawerLayout.DrawerListener {
 
@@ -396,7 +396,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             true
         }
 
-    open fun toggle() {
+    private fun toggle() {
         val drawerLockMode = drawer_layout.getDrawerLockMode(GravityCompat.START)
         if (drawer_layout.isDrawerVisible(GravityCompat.START) && drawerLockMode != DrawerLayout.LOCK_MODE_LOCKED_OPEN)
             drawer_layout.closeDrawer(GravityCompat.START)

@@ -13,6 +13,7 @@ import com.release.wanandroid.utils.ImageLoader
  * @create 2019/7/1
  * @Describe
  */
+@Suppress("DEPRECATION")
 class ProjectAdapter(private val context: Context?, datas: MutableList<Article>)
     : BaseQuickAdapter<Article, BaseViewHolder>(R.layout.item_project_list, datas) {
 

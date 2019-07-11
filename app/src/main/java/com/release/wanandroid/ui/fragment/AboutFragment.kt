@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.fragment_about.*
  * @create 2019/7/1
  * @Describe
  */
+@Suppress("DEPRECATION")
 class AboutFragment : BaseFragment() {
 
     companion object {

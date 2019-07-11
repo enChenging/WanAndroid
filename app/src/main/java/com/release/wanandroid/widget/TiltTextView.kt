@@ -163,7 +163,7 @@ class TiltTextView : View {
     private fun drawText(canvas: Canvas) {
         val w = (canvas.width - mTiltLength / 2).toInt()
         val h = (canvas.height - mTiltLength / 2).toInt()
-        val xy = calculateXY(canvas, w, h)
+        val xy = calculateXY(w, h)
 
         val toX = xy[0]
         val toY = xy[1]
@@ -176,11 +176,11 @@ class TiltTextView : View {
         canvas.drawText(mTiltText!!, toX, toY, mTextPaint!!)
     }
 
-    private fun calculateXY(canvas: Canvas, w: Int, h: Int): FloatArray {
+    private fun calculateXY(w: Int, h: Int): FloatArray {
         val xy = FloatArray(5)
-        var rect: Rect? = null
-        var rectF: RectF? = null
-        val offset = (mTiltLength / 2).toInt()
+        var rect: Rect?
+        var rectF: RectF?
+        (mTiltLength / 2).toInt()
 
         when (mMode) {
             MODE_LEFT_TOP, MODE_LEFT_TOP_TRIANGLE -> {
