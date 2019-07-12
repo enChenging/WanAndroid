@@ -62,7 +62,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
 
     private var mIndex = FRAGMENT_HOME
 
-    val fragments = ArrayList<Fragment>(5)
+    private val fragments = ArrayList<Fragment>(5)
 
     override fun useEventBus(): Boolean = true
 
@@ -97,7 +97,21 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         outState?.putInt(BOTTOM_INDEX, mIndex)
     }
 
-    var nav_mode: MenuItem? = null
+    private var nav_mode: MenuItem? = null
+
+    override fun initData() {
+        fragments.clear()
+        fragments.add(HomeFragment.getInstance())
+        fragments.add(KnowledgeTreeFragment.getInstance())
+        fragments.add(WeChatFragment.getInstance())
+        fragments.add(NavigationFragment.getInstance())
+        fragments.add(ProjectFragment.getInstance())
+
+        vp_main.run {
+            adapter = mAdapter
+            offscreenPageLimit = 5
+        }
+    }
 
     override fun initView() {
         super.initView()
@@ -171,19 +185,6 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         ViewPagerAdapter(fragments, supportFragmentManager)
     }
 
-    override fun initData() {
-        fragments.clear()
-        fragments.add(HomeFragment.getInstance())
-        fragments.add(KnowledgeTreeFragment.getInstance())
-        fragments.add(WeChatFragment.getInstance())
-        fragments.add(NavigationFragment.getInstance())
-        fragments.add(ProjectFragment.getInstance())
-
-        vp_main.run {
-            adapter = mAdapter
-            offscreenPageLimit = 5
-        }
-    }
 
     override fun initThemeColor() {
         super.initThemeColor()
@@ -239,7 +240,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
 
         drawer_layout.run {
 
-            setScrimColor(ContextCompat.getColor(this@MainActivity,R.color.Black_alpha_32))
+            setScrimColor(ContextCompat.getColor(this@MainActivity, R.color.Black_alpha_32))
 
             addDrawerListener(object : DrawerLayout.DrawerListener {
 

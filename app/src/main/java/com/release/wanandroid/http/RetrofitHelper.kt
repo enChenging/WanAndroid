@@ -1,3 +1,5 @@
+@file:Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+
 package com.release.wanandroid.http
 
 import com.release.wanandroid.App
@@ -61,12 +63,14 @@ object RetrofitHelper {
         //设置 请求的缓存的大小跟位置
         val cacheFile = File(App.context.cacheDir, "cache")
         val cache = Cache(cacheFile, HttpConstant.MAX_CACHE_SIZE)
+        val sslParams = HttpsUtils.sslSocketFactory
 
         builder.run {
             addInterceptor(httpLoggingInterceptor)
             addInterceptor(HeaderInterceptor())
-            addInterceptor(SaveCookieInterceptor())
+            addNetworkInterceptor(SaveCookieInterceptor())
             addInterceptor(CacheInterceptor())
+            sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)
             cache(cache)  //添加缓存
             connectTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
             readTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)

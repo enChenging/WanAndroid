@@ -1,6 +1,5 @@
 package com.release.wanandroid.mvp.presenter
 
-import com.orhanobut.logger.Logger
 import com.release.wanandroid.ext.ss
 import com.release.wanandroid.mvp.contract.HomeContract
 import com.release.wanandroid.mvp.model.HomeModel
