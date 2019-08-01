@@ -38,8 +38,8 @@ object RetrofitHelper {
                     retrofit = Retrofit.Builder()
                         .baseUrl(Constant.BASE_URL)  // baseUrl
                         .client(getOkHttpClient())
-                        .addConverterFactory(GsonConverterFactory.create())
                         .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
                         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//rx网络适配器
                         .build()
                 }

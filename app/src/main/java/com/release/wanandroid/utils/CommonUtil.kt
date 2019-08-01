@@ -3,11 +3,16 @@
 package com.release.wanandroid.utils
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.support.design.widget.BottomNavigationView
+import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.release.wanandroid.R
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.BufferedReader
 import java.io.FileReader
 import java.io.IOException
@@ -109,7 +114,7 @@ object CommonUtil {
             reader = BufferedReader(FileReader("/proc/$pid/cmdline"))
             var processName = reader.readLine()
             if (!TextUtils.isEmpty(processName)) {
-                processName = processName.trim({ it <= ' ' })
+                processName = processName.trim { it <= ' ' }
             }
             return processName
         } catch (throwable: Throwable) {
@@ -122,6 +127,19 @@ object CommonUtil {
             }
         }
         return ""
+    }
+
+     fun initNavigationColor(ct:Context,themeColor:Int,bottom_navigation: BottomNavigationView) {
+
+        val states = Array(2) { IntArray(1) }
+        states[0][0] = -android.R.attr.state_checked
+        states[1][0] = android.R.attr.state_checked
+        val colors = IntArray(2)
+        colors[0] = ContextCompat.getColor(ct, R.color.Black)
+        colors[1] = themeColor
+        val csl = ColorStateList(states, colors)
+        bottom_navigation.itemTextColor = csl
+        bottom_navigation.itemIconTintList = csl
     }
 
 }

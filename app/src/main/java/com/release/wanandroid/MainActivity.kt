@@ -30,9 +30,11 @@ import com.release.wanandroid.ui.activity.TodoActivity
 import com.release.wanandroid.ui.adapter.ViewPagerAdapter
 import com.release.wanandroid.ui.fragment.*
 import com.release.wanandroid.ui.login.LoginActivity
+import com.release.wanandroid.utils.CommonUtil.initNavigationColor
 import com.release.wanandroid.utils.DialogUtil
 import com.release.wanandroid.utils.SettingUtil
 import com.release.wanandroid.utils.Sp
+import com.release.wanandroid.utils.StatusBarUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.greenrobot.eventbus.EventBus
@@ -188,7 +190,8 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
 
     override fun initThemeColor() {
         super.initThemeColor()
-        initNavigationColor()
+        StatusBarUtil.setColorNoTranslucentForDrawerLayout(this, drawer_layout,mThemeColor)
+        initNavigationColor(this, mThemeColor, bottom_navigation)
         refreshColor(ColorEvent(true))
     }
 
@@ -223,18 +226,6 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             fragment.lazyLoad()
     }
 
-    private fun initNavigationColor() {
-
-        val states = Array(2) { IntArray(1) }
-        states[0][0] = -android.R.attr.state_checked
-        states[1][0] = android.R.attr.state_checked
-        val colors = IntArray(2)
-        colors[0] = ContextCompat.getColor(this@MainActivity, R.color.Black)
-        colors[1] = mThemeColor
-        val csl = ColorStateList(states, colors)
-        bottom_navigation.itemTextColor = csl
-        bottom_navigation.itemIconTintList = csl
-    }
 
     private fun initDrawerLayout() {
 
