@@ -1,10 +1,9 @@
-MVP_Plus
+WanAndroid
 =
 
-[MVP_Plus](https://github.com/enChenging/MVP_Plus)示例用于解释如何在我们的Android应用程序中使用mvp模式。项目代码整体干净，此项目可以用来学习优化自己的MVP架构。
+[WanAndroid](https://github.com/enChenging/WanAndroid)
 
-<img src="https://github.com/enChenging/MVP_Plus/blob/master/screenshot/screen.png" width="500">
-<img src="https://github.com/enChenging/MVP_Plus/blob/master/screenshot/video.gif" width="200">
+<img src="https://github.com/enChenging/WanAndroid/blob/master/screenshot/video.gif" width="200">
 
 用到的第三方库
 -
