@@ -1,7 +1,7 @@
 WanAndroid
 =
 
-[WanAndroid](https://github.com/enChenging/WanAndroid)
+效果图如下：
 
 <img src="https://github.com/enChenging/WanAndroid/blob/master/screenshot/video.gif" width="200">
 
