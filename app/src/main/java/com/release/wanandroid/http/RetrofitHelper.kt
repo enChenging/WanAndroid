@@ -4,7 +4,7 @@ package com.release.wanandroid.http
 
 import com.release.wanandroid.App
 import com.release.wanandroid.BuildConfig
-import com.release.wanandroid.api.ApiService
+import com.release.wanandroid.http.api.ApiService
 import com.release.wanandroid.constant.Constant
 import com.release.wanandroid.constant.HttpConstant
 import com.release.wanandroid.http.interceptor.CacheInterceptor
